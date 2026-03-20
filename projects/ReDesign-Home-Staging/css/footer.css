@@ -1,0 +1,149 @@
+/* footer.css - styling for the site footer */
+
+footer {
+    background: var(--dark-navy);
+    color: rgba(255, 255, 255, 0.65);
+    padding: 60px 40px 32px;
+}
+
+/* CTA section at top of footer */
+.footer-cta {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.footer-cta-label {
+    font-size: 0.95rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+}
+
+.footer-cta h2 {
+    font-family: var(--font-serif);
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+}
+
+.footer-cta h2 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--gold);
+}
+
+.footer-cta-btn {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 0.75rem 2rem;
+    background: var(--gold);
+    color: var(--white);
+    font-size: 0.88rem;
+    font-weight: 600;
+    border-radius: 30px;
+    transition: background 0.2s;
+}
+
+.footer-cta-btn:hover {
+    background: var(--gold-hover);
+}
+
+/* hide CTA button on consult page since user is already there */
+.hide-footer-cta .footer-cta-btn {
+    display: none;
+}
+
+.footer-lower {
+    background: var(--darkest-navy);
+    margin: 0 -40px -32px;
+    padding: 40px 40px 32px;
+}
+
+/* four column grid */
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    gap: 48px;
+    max-width: 1100px;
+    margin: 0 auto 40px;
+}
+
+/* brand column */
+.footer-brand {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--white);
+    margin-bottom: 12px;
+}
+
+.footer-tagline {
+    font-size: 0.82rem;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+/* link columns */
+.footer-col h4 {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 16px;
+}
+
+.footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-col ul li a {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    transition: color 0.2s;
+}
+
+.footer-col ul li a:hover {
+    color: var(--gold);
+}
+
+/* bottom bar */
+.footer-bottom {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* mobile */
+@media (max-width: 768px) {
+    footer {
+        padding: 48px 20px 24px;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+    }
+
+    .footer-cta h2 {
+        font-size: 1.8rem;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+}

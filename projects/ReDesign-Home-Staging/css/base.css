@@ -1,0 +1,245 @@
+/* base.css - universal styling across pages */
+
+/* importing google fonts for Libre Baskerville and DM Sans */
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+/* root variables */
+:root {
+  --navy:         #1a1f5e;
+  --navy-blue:    #294187;
+  --dark-navy:    #12065C;
+  --darkest-navy: #0A0438;
+  --light-blue:   #5D567D;
+  --gold:         #C9953A;
+  --gold-hover:   #e6b965;
+  --white:        #ffffff;
+  --off-white:    #f4f4f7;
+  --bg-white:     #F7F6FC;
+  --gray:         #BFBFBF;
+  --dark-gray:    #6E6E6E;
+  --nav-height: 68px;
+  --font-serif: 'Libre Baskerville', Georgia, serif;
+  --font-sans:  'DM Sans', sans-serif;
+}
+
+/* reset CSS */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-white);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.gold {
+  color: var(--gold);
+}
+
+.inline {
+  display: inline-block;
+}
+
+/* navbar */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: var(--nav-height);
+  background: var(--navy);
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* brand / logo text */
+#brand {
+  font-family: var(--font-serif);
+  font-size: 1.20rem;
+  /* font-weight: 700; */
+  font-style: italic;
+  color: var(--white);
+  flex-shrink: 0;
+}
+
+/* link list */
+#nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  list-style: none;
+  margin-left: auto;
+}
+
+#nav-links a {
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.03em;
+  position: relative;
+  transition: color 0.2s;
+}
+
+/* underline animation on hover */
+#nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--gold);
+  transition: width 0.2s;
+}
+
+#nav-links a:hover {
+  color: var(--white);
+}
+
+#nav-links a:hover::after {
+  width: 100%;
+}
+
+/* active page indicator */
+#nav-links a.active {
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.12);
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+
+#nav-links a.active::after {
+  display: none;
+}
+
+/* book button */
+#nav-book {
+  background: var(--gold);
+  color: var(--white) !important;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 10px 20px;
+  border-radius: 30px;
+  transition: background 0.2s;
+}
+
+#nav-book:hover {
+  background: var(--gold-hover);
+}
+
+/* book button active state */
+#nav-book.active {
+  background: var(--gold-hover);
+}
+
+#nav-book::after,
+#nav-book.active::after {
+  display: none !important;
+}
+
+/* hamburger button */
+#nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  margin-left: 16px
+}
+
+#nav-toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--white);
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+/* mobile responsiveness */
+@media (max-width: 768px) {
+  nav {
+    padding: 0 20px;
+  }
+
+  #nav-links {
+    display: none;
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    background: var(--navy);
+    flex-direction: column;
+    gap: 0;
+    padding: 12px 0 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  }
+
+  #nav-links.open {
+    display: flex;
+  }
+
+  #nav-links li {
+    width: 100%;
+    text-align: center;
+  }
+
+  #nav-links a {
+    display: block;
+    padding: 14px 24px;
+    font-size: 0.95rem;
+  }
+
+  #nav-links a::after {
+    display: none;
+  }
+
+  #nav-links a.active {
+    padding: 14px 24px;
+    border-radius: 0;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  #nav-toggle {
+    display: flex;
+    margin-left: 16px;
+  }
+
+  #nav-toggle.open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  #nav-toggle.open span:nth-child(2) {
+    opacity: 0;
+  }
+
+  #nav-toggle.open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+}
+
+/* offsetting page content below fixed nav */
+#page-body {
+  padding-top: var(--nav-height);
+}

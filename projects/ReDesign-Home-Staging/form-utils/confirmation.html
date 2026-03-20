@@ -1,0 +1,54 @@
+<!-- confirmation.html - confirmation page after consultation form submission -->
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Thank You | ReDesign Home Staging</title>
+        <link rel="stylesheet" href="../css/base.css" />
+        <link rel="stylesheet" href="confirmation.css" />
+    </head>
+    <body>
+
+        <!-- navbar -->
+        <nav id="navbar">
+            <a href="../php/index.php" id="brand">ReDesign Home Staging</a>
+
+            <ul id="nav-links">
+                <li><a href="../services.html">Services</a></li>
+                <li><a href="../php/about.php">About</a></li>
+                <li><a href="../consult.html" id="nav-book">Book A Consultation</a></li>
+            </ul>
+
+            <!-- hamburger menu for mobile responsiveness -->
+            <button id="nav-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+
+        <main id="page-body">
+            <section class="thankyou">
+
+                <!-- checkmark icon -->
+                <div class="thankyou-icon">✓</div>
+
+                <h1>Thank You!</h1>
+                <p>We've received your consultation request and will be in touch within 24 hours.</p>
+
+                <!-- links back to site -->
+                <div class="thankyou-links">
+                    <a href="../php/index.php" class="thankyou-btn">Back to Home</a>
+                    <a href="../services.html" class="thankyou-btn secondary">View Our Services</a>
+                </div>
+
+            </section>
+        </main>
+
+        <script src="../js/navbar.js"></script>
+
+    </body>
+</html>

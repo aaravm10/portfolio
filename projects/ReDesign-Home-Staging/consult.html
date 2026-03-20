@@ -1,0 +1,214 @@
+<!-- consult.html - consultation/contact page for ReDesign Home Staging website -->
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Book a Consultation | ReDesign Home Staging</title>
+        <link rel="stylesheet" href="css/base.css" />
+        <link rel="stylesheet" href="css/consult.css" />
+        <link rel="stylesheet" href="css/footer.css" />
+    </head>
+    
+    <body class="hide-footer-cta">
+
+        <!-- navbar -->
+        <nav id="navbar">
+            <a href="php/index.php" id="brand">ReDesign Home Staging</a>
+
+            <ul id="nav-links">
+                <li><a href="services.html">Services</a></li>
+                <li><a href="php/about.php">About</a></li>
+                <li><a href="consult.html" id="nav-book" class="active">Book A Consultation</a></li>
+            </ul>
+
+            <!-- hamburger menu for mobile responsiveness -->
+            <button id="nav-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+
+        <main id="page-body">
+
+            <!-- page header -->
+            <section class="consult-header">
+                <p><span class="gold">✦ GET STARTED</span></p>
+                <h1><span class="italic">Contact</span> Us</h1>
+                <p class="subtext">Ready to transform your home? Fill out the form below and we'll reach out within 24 hours to confirm your consultation.</p>
+            </section>
+
+            <!-- consultation request form -->
+            <section class="form-section">
+                <div class="form-card">
+                    <h2>Request a <span class="gold">Consultation</span></h2>
+
+                    <form action="php/submit.php" method="POST" id="consult-form">
+
+                        <div class="form-row">
+                            <!-- full name -->
+                            <div class="form-group">
+                                <label for="name">Full Name <span class="req">*</span></label>
+                                <input type="text" id="name" name="name" placeholder="Jane Smith" required />
+                            </div>
+
+                            <!-- email -->
+                            <div class="form-group">
+                                <label for="email">Email Address <span class="req">*</span></label>
+                                <input type="email" id="email" name="email" placeholder="jane@example.com" required />
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <!-- phone -->
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" placeholder="(408) 555-0000" />
+                            </div>
+
+                            <!-- preferred date -->
+                            <div class="form-group">
+                                <label for="date">Preferred Consultation Date</label>
+                                <input type="date" id="date" name="date" />
+                            </div>
+                        </div>
+
+                        <!-- message -->
+                        <div class="form-group">
+                            <label for="message">Message <span class="req">*</span></label>
+                            <textarea id="message" name="message" rows="5" placeholder="Tell us about your property — address, size, timeline, and any questions you have." required></textarea>
+                        </div>
+
+                        <div class="form-footer">
+                            <p class="form-note">Fields marked <span class="req">*</span> are required.</p>
+                            <button type="submit" class="submit-btn">Send Request</button>
+                        </div>
+
+                    </form>
+                </div>
+            </section>
+
+            <!-- scroll indicator linking down to FAQ -->
+            <div class="scroll-divider">
+                <a href="#faq" class="scroll-down">
+                    <span>Frequently Asked Questions</span>
+                    <div class="scroll-arrow">↓</div>
+                </a>
+            </div>
+
+            <!-- FAQ section -->
+            <section id="faq" class="faq-section">
+                <p><span class="gold">✦ FAQ</span></p>
+                <h2>Frequently Asked <span class="italic gold">Questions</span></h2>
+
+                <div class="faq-list">
+
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            How long does staging take?
+                            <span class="faq-icon"></span>
+                        </button>
+                        <div class="faq-answer" hidden>
+                            <p>Most projects are completed within 1-3 days depending on the size of the home and scope of work. A full staging typically takes one full day, while a redesign consultation may only require a few hours.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            What is included in your services?
+                            <span class="faq-icon"></span>
+                        </button>
+                        <div class="faq-answer" hidden>
+                            <p>Every package includes an initial walkthrough, a customized staging plan, furniture and décor placement, and a final styling review. Higher-tier packages add furniture rental, professional photography coordination, and extended rental periods.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            How much does it cost?
+                            <span class="faq-icon"></span>
+                        </button>
+                        <div class="faq-answer" hidden>
+                            <p>Pricing depends on the size of the property and the services selected. We offer three packages — Standard, Professional, and Expert — with full details on our <a href="services.html">Services page</a>. Book a free consultation for a personalized quote.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            Do I need to vacate the property during staging?
+                            <span class="faq-icon"></span>
+                        </button>
+                        <div class="faq-answer" hidden>
+                            <p>For occupied homes, we work around your schedule and only need access to the areas being staged. For vacant properties, our team can work independently with a key or lockbox access.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            How far in advance should I book?
+                            <span class="faq-icon"></span>
+                        </button>
+                        <div class="faq-answer" hidden>
+                            <p>We recommend booking at least 2 weeks before your desired staging date. For listings going live during peak season (spring/summer), 3-4 weeks notice is ideal to ensure availability.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+
+        <!-- footer -->
+        <footer>
+            <div class="footer-cta">
+                <p class="footer-cta-label">✦ Ready To Sell?</p>
+                <h2>Transform Your Home.<br><em>Maximize Your Sale.</em></h2>
+                <a href="consult.html" class="footer-cta-btn">Book A Consultation</a>
+            </div>
+    
+            <div class="footer-lower">
+				<div class="footer-grid">
+					<div>
+						<p class="footer-brand">ReDesign Home Staging</p>
+						<p class="footer-tagline">We transform homes buyers fall in love with before they step inside. Professional staging that elevates your listing.</p>
+					</div>
+					<div class="footer-col">
+						<h4>Services</h4>
+						<ul>
+							<li><a href="services.html#packages">Standard</a></li>
+							<li><a href="services.html#packages">Professional</a></li>
+							<li><a href="services.html#packages">Expert</a></li>
+						</ul>
+					</div>
+					<div class="footer-col">
+						<h4>Company</h4>
+						<ul>
+							<li><a href="php/index.php#portfolio">Portfolio</a></li>
+							<li><a href="php/about.php">About Us</a></li>
+							<li><a href="php/index.php#testimonials">Testimonials</a></li>
+						</ul>
+					</div>
+					<div class="footer-col">
+						<h4>Contact</h4>
+						<ul>
+							<li><a>(xxx) xxx-xxxx</a></li>
+							<li><a href="mailto:email@email.com">email@email.com</a></li>
+							<li><a href="https://www.realtor.com" target="_blank">Realtor.com</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="footer-bottom">
+					<span>&copy; 2026 ReDesign Home Staging. All rights reserved.</span>
+					<span>Diego Silva &middot; Cole Prendeville &middot; Aarav Mehta</span>
+				</div>
+			</div>
+        </footer>
+
+        <script src="js/navbar.js"></script>
+        <script src="js/consult.js"></script>
+
+    </body>
+</html>
