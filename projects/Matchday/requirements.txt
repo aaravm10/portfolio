@@ -1,0 +1,12 @@
+flask
+pandas
+openpyxl
+requests
+understatapi
+matplotlib
+numpy
+pillow
+pytest
+pytest-cov
+flask-session
+dotenv

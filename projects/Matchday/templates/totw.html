@@ -1,0 +1,588 @@
+{% extends "base.html" %}
+
+{% block title %}Team of the Week - GW{{ gameweek }} | MATCHDAY{% endblock %}
+
+{% block head %}
+<style>
+    body {
+        background-color: #000000;
+    }
+    
+    .main {
+        padding: 0;
+    }
+    
+    .totw-section {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #000000 0%, #071421 100%);
+        padding: 100px 0 50px 0;
+    }
+    
+    .totw-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 3rem;
+    }
+    
+    .totw-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .totw-header h1 {
+        font-size: 48px;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: 3px;
+        text-shadow: 0 0 40px rgba(42, 167, 255, 0.5);
+        margin: 0 0 10px 0;
+    }
+    
+    .totw-header .gameweek-info {
+        font-size: 14px;
+        color: rgba(255,255,255,0.6);
+        letter-spacing: 2px;
+    }
+    
+    /* Gameweek Selector */
+    .gameweek-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 40px;
+    }
+    
+    .gameweek-controls label {
+        color: rgba(255,255,255,0.6);
+        font-size: 11px;
+        letter-spacing: 2px;
+    }
+    
+    .gameweek-controls input {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 10px 15px;
+        font-size: 14px;
+        width: 80px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+    
+    .gameweek-controls input:focus {
+        outline: none;
+        border-color: rgba(42, 167, 255, 0.6);
+        background: rgba(255, 255, 255, 0.08);
+    }
+    
+    .gameweek-controls button {
+        background: transparent;
+        border: 1px solid rgba(255,255,255,0.3);
+        color: rgba(255,255,255,0.8);
+        padding: 10px 25px;
+        font-size: 11px;
+        letter-spacing: 2px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .gameweek-controls button:hover {
+        border-color: rgba(255,255,255,0.6);
+        color: white;
+        background: rgba(255,255,255,0.05);
+    }
+    
+    /* Formation Display */
+    .formation-badge {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .formation-badge .formation-number {
+        font-size: 36px;
+        font-weight: 700;
+        color: rgba(42, 167, 255, 0.9);
+        letter-spacing: 4px;
+    }
+    
+    /* Soccer Field */
+    .soccer-field {
+        position: relative;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        background: linear-gradient(180deg, 
+            rgba(10, 50, 30, 0.3) 0%, 
+            rgba(5, 30, 20, 0.4) 100%);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        min-height: 800px;
+    }
+    
+    /* Position Lines */
+    .position-line {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 60px;
+        position: relative;
+    }
+    
+    .position-line.forwards {
+        margin-bottom: 80px;
+    }
+    
+    .position-line.goalkeepers {
+        margin-bottom: 0;
+    }
+    
+    /* Player Card */
+    .player-card {
+        width: 180px;
+        height: 240px;
+        background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.08) 0%, 
+            rgba(255, 255, 255, 0.03) 100%);
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .player-card:hover {
+        transform: translateY(-10px) scale(1.05);
+        border-color: rgba(42, 167, 255, 0.6);
+        box-shadow: 0 10px 30px rgba(42, 167, 255, 0.3);
+    }
+    
+    /* Top Performer Badge */
+    .player-card.top-performer {
+        border: 2px solid rgba(255, 215, 0, 0.8);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+    
+    .player-card.top-performer:hover {
+        border-color: rgba(255, 215, 0, 1);
+        box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
+    }
+    
+    /* Position badge */
+    .position-badge {
+        position: absolute;
+        bottom: 93px; 
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 7px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        z-index: 3;
+    }
+
+    /* Rating badge */
+    .rating-badge {
+        position: absolute;
+        top: 8px;
+        right: 6px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 4px 6px;
+        min-width: 34px; 
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        z-index: 3;
+    }
+
+    .rating-badge .star {
+        color: #FFD700;
+        font-size: 12px;
+        margin-right: 4px; 
+    }
+
+    
+    /* Player Photo */
+    .player-photo {
+        width: 100%;
+        height: 120px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-top: 30px;
+        position: relative;
+    }
+    
+    .player-photo img {
+        height: 110px;
+        width: auto;
+        object-fit: contain;
+        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+    }
+    
+    /* Team Badge */
+    .team-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 30px;
+        height: 30px;
+        z-index: 2;
+    }
+    
+    .team-badge img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+    
+    /* Player Info */
+    .player-info {
+        padding: 20px 10px 10px 10px;
+        text-align: center;
+    }
+    
+    .player-name {
+        font-size: 13px; 
+        font-weight: 700;
+        color: white;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        line-height: 1.2;
+        min-height: 28px;  
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Stats Grid */
+    .player-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+        margin-top: 8px;
+    }
+    
+    .stat-item {
+        text-align: center;
+    }
+    
+    .stat-item .stat-label {
+        font-size: 8px;
+        color: rgba(255,255,255,0.5);
+        letter-spacing: 1px;
+        margin-bottom: 2px;
+        text-transform: uppercase;
+    }
+    
+    .stat-item .stat-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: white;
+    }
+    
+    /* Responsive */
+    @media (max-width: 1200px) {
+        .player-card {
+            width: 160px;
+            height: 220px;
+        }
+        
+        .position-line {
+            gap: 15px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .totw-container {
+            padding: 0 1rem;
+        }
+        
+        .totw-header h1 {
+            font-size: 32px;
+        }
+        
+        .player-card {
+            width: 140px;
+            height: 200px;
+        }
+        
+        .player-photo img {
+            height: 90px;
+        }
+        
+        .position-line {
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .soccer-field {
+            min-height: auto;
+            padding: 20px 10px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="totw-section">
+    <div class="totw-container">
+        <!-- Header -->
+        <div class="totw-header">
+            <h1>TEAM OF THE WEEK</h1>
+            <div class="gameweek-info">GAMEWEEK {{ gameweek }}</div>
+        </div>
+        
+        <!-- Gameweek Selector -->
+        <form method="GET" action="{{ url_for('totw.totw_page') }}" class="gameweek-controls">
+            <label for="gameweek">GAMEWEEK</label>
+            <input type="number" id="gameweek" name="gameweek" 
+                   value="{{ gameweek }}" min="1" max="{{ current_gw }}">
+            <button type="submit">VIEW</button>
+        </form>
+        
+        <!-- Formation Badge -->
+        <div class="formation-badge">
+            <div class="formation-number">{{ formation }}</div>
+        </div>
+        
+        <!-- Soccer Field with Formation Layout -->
+        <div class="soccer-field">
+            <!-- Forwards -->
+            {% if by_position['forwards']|length > 0 %}
+            <div class="position-line forwards">
+                {% for player in by_position['forwards'] %}
+                <div class="player-card {% if player.is_top_performer %}top-performer{% endif %}">
+                    <!-- Rating Badge -->
+                    <div class="rating-badge">
+                        {% if player.is_top_performer %}
+                        <span class="star">★</span>
+                        {% endif %}
+                        {{ "%.1f"|format(player['rating']) }}
+                    </div>
+
+                    <!-- Position Badge -->
+                    <div class="position-badge">
+                        {% if player['position'] == 1 %}GK
+                        {% elif player['position'] == 2 %}DEF
+                        {% elif player['position'] == 3 %}MID
+                        {% elif player['position'] == 4 %}FWD
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Team Badge -->
+                    <div class="team-badge">
+                        <img src="{{ player['team_badge'] }}" alt="{{ player['team_short'] }}" onerror="this.style.display='none'">
+                    </div>
+                    
+                    <!-- Player Photo -->
+                    <div class="player-photo">
+                        <img src="{{ player['photo_url'] }}" alt="{{ player['player_name'] }}" onerror="this.src='{{ url_for('static', filename='images/totw/placeholder.png') }}'">
+                    </div>
+                    
+                    <!-- Player Info -->
+                    <div class="player-info">
+                        <div class="player-name">{{ player['player_name'] }}</div>
+                        
+                        <div class="player-stats">
+                            <div class="stat-item">
+                                <div class="stat-label">GOL</div>
+                                <div class="stat-value">{{ player['goals'] }}</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">AST</div>
+                                <div class="stat-value">{{ player['assists'] }}</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">MIN</div>
+                                <div class="stat-value">{{ player['minutes'] }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <!-- Midfielders -->
+            {% if by_position['midfielders']|length > 0 %}
+            <div class="position-line midfielders">
+                {% for player in by_position['midfielders'] %}
+                <div class="player-card {% if player.is_top_performer %}top-performer{% endif %}">
+                    <div class="rating-badge">
+                        {% if player.is_top_performer %}
+                        <span class="star">★</span>
+                        {% endif %}
+                        {{ "%.1f"|format(player['rating']) }}
+                    </div>
+
+                    <div class="position-badge">
+                        {% if player['position'] == 1 %}GK
+                        {% elif player['position'] == 2 %}DEF
+                        {% elif player['position'] == 3 %}MID
+                        {% elif player['position'] == 4 %}FWD
+                        {% endif %}
+                    </div>
+                    
+                    <div class="team-badge">
+                        <img src="{{ player['team_badge'] }}" alt="{{ player['team_short'] }}" onerror="this.style.display='none'">
+                    </div>
+                    
+                    <div class="player-photo">
+                        <img src="{{ player['photo_url'] }}" alt="{{ player['player_name'] }}" onerror="this.src='{{ url_for('static', filename='images/totw/placeholder.png') }}'">
+                    </div>
+                    
+                    <div class="player-info">
+                        <div class="player-name">{{ player['player_name'] }}</div>
+                        
+                        <div class="player-stats">
+                            <div class="stat-item">
+                                <div class="stat-label">GOL</div>
+                                <div class="stat-value">{{ player['goals'] }}</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">AST</div>
+                                <div class="stat-value">{{ player['assists'] }}</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">MIN</div>
+                                <div class="stat-value">{{ player['minutes'] }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <!-- Defenders -->
+            {% if by_position['defenders']|length > 0 %}
+            <div class="position-line defenders">
+                {% for player in by_position['defenders'] %}
+                <div class="player-card {% if player.is_top_performer %}top-performer{% endif %}">
+                    <div class="rating-badge">
+                        {% if player.is_top_performer %}
+                        <span class="star">★</span>
+                        {% endif %}
+                        {{ "%.1f"|format(player['rating']) }}
+                    </div>
+
+                    <div class="position-badge">
+                        {% if player['position'] == 1 %}GK
+                        {% elif player['position'] == 2 %}DEF
+                        {% elif player['position'] == 3 %}MID
+                        {% elif player['position'] == 4 %}FWD
+                        {% endif %}
+                    </div>
+                    
+                    <div class="team-badge">
+                        <img src="{{ player['team_badge'] }}" alt="{{ player['team_short'] }}" onerror="this.style.display='none'">
+                    </div>
+                    
+                    <div class="player-photo">
+                        <img src="{{ player['photo_url'] }}" alt="{{ player['player_name'] }}" onerror="this.src='{{ url_for('static', filename='images/totw/placeholder.png') }}'">
+                    </div>
+                    
+                    <div class="player-info">
+                        <div class="player-name">{{ player['player_name'] }}</div>
+                        
+                        <div class="player-stats">
+                            <div class="stat-item">
+                                <div class="stat-label">GOL</div>
+                                <div class="stat-value">{{ player['goals'] }}</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">AST</div>
+                                <div class="stat-value">{{ player['assists'] }}</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">CS</div>
+                                <div class="stat-value">{{ player['clean_sheets'] }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <!-- Goalkeepers -->
+            {% if by_position['goalkeepers']|length > 0 %}
+            <div class="position-line goalkeepers">
+                {% for player in by_position['goalkeepers'] %}
+                <div class="player-card {% if player.is_top_performer %}top-performer{% endif %}">
+                    <div class="rating-badge">
+                        {% if player.is_top_performer %}
+                        <span class="star">★</span>
+                        {% endif %}
+                        {{ "%.1f"|format(player['rating']) }}
+                    </div>
+
+                    <div class="position-badge">
+                        {% if player['position'] == 1 %}GK
+                        {% elif player['position'] == 2 %}DEF
+                        {% elif player['position'] == 3 %}MID
+                        {% elif player['position'] == 4 %}FWD
+                        {% endif %}
+                    </div>
+                    
+                    <div class="team-badge">
+                        <img src="{{ player['team_badge'] }}" alt="{{ player['team_short'] }}" onerror="this.style.display='none'">
+                    </div>
+                    
+                    <div class="player-photo">
+                        <img src="{{ player['photo_url'] }}" alt="{{ player['player_name'] }}" onerror="this.src='{{ url_for('static', filename='images/totw/placeholder.png') }}'">
+                    </div>
+                    
+                    <div class="player-info">
+                        <div class="player-name">{{ player['player_name'] }}</div>
+                        
+                        <div class="player-stats">
+                            <div class="stat-item">
+                                <div class="stat-label">SAV</div>
+                                <div class="stat-value">{{ player['saves'] }}</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">CS</div>
+                                <div class="stat-value">{{ player['clean_sheets'] }}</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">MIN</div>
+                                <div class="stat-value">{{ player['minutes'] }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Auto-hide flash messages
+    setTimeout(() => {
+        const flashMessages = document.querySelectorAll('.flash-message');
+        flashMessages.forEach(message => {
+            message.style.display = 'none';
+        });
+    }, 5000);
+</script>
+{% endblock %}

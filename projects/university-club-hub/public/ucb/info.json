@@ -1,0 +1,37 @@
+{
+    "name": "University of California, Berkeley",
+    "abbreviation": "UCB",
+    "primary-color": "#002676",
+    "secondary-color": "#F2F2F2",
+    "accent-color": "#FDB515FB",
+    "secondary-text-color": "#808080",
+    "slogan": "Go Bears. Get involved.",
+    "majors": {
+        "BIOE": "Bioengineering",
+        "BUSN": "Business",
+        "COEN": "Computer Engineering",
+        "CS": "Computer Science",
+        "ECON": "Economics",
+        "EECS": "Electrical Engineering and Computer Sciences",
+        "ENGIN": "Engineering",
+        "HIST": "History",
+        "MECH": "Mechanical Engineering",
+        "MKTG": "Marketing",
+        "POLS": "Political Science"
+    },
+    "tags": {
+        "academic": "Academic",
+        "arts": "Arts",
+        "business": "Business",
+        "cultural": "Cultural",
+        "engineering": "Engineering",
+        "service": "Service",
+        "social": "Social",
+        "sports & recreation": "Sports & Recreation",
+        "theater": "Theater"
+    },
+    "commitments": {
+        "weekly": "Weekly",
+        "monthly": "Monthly"
+    }
+}

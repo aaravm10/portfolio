@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}Error - MATCHDAY{% endblock %}
+
+{% block content %}
+<section class="error-section">
+    <div class="container">
+        <div class="error-container">
+            <div class="error-icon">⚠️</div>
+            <h1>Data Load Error</h1>
+            <p>We encountered an issue while loading the Premier League data.</p>
+            
+            <div class="error-details">
+                <h3>Error Details:</h3>
+                <p class="error-message">{{ error }}</p>
+            </div>
+            
+            <div class="error-actions">
+                <a href="/dashboard" class="btn btn-primary">Try Again</a>
+                <a href="{{ url_for('main.home') }}" class="btn btn-secondary">Go Home</a>
+            </div>
+            
+            <div class="error-help">
+                <h3>Possible Solutions:</h3>
+                <ul>
+                    <li>Check your internet connection</li>
+                    <li>Try refreshing the page</li>
+                    <li>The data sources might be temporarily unavailable</li>
+                    <li>Contact support if the issue persists</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block head %}
+<style>
+    .error-section {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #071421 0%, #0a1a2a 100%);
+        color: white;
+    }
+    
+    .error-container {
+        text-align: center;
+        max-width: 600px;
+        padding: 2rem;
+    }
+    
+    .error-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+    
+    .error-container h1 {
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        font-weight: 600;
+        color: #ff6b6b;
+    }
+    
+    .error-container > p {
+        margin: 0 0 2rem 0;
+        opacity: 0.8;
+        font-size: 1.1rem;
+    }
+    
+    .error-details {
+        background: rgba(255,255,255,0.1);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        text-align: left;
+    }
+    
+    .error-details h3 {
+        margin: 0 0 1rem 0;
+        color: #ff6b6b;
+    }
+    
+    .error-message {
+        font-family: monospace;
+        background: rgba(0,0,0,0.3);
+        padding: 1rem;
+        border-radius: 4px;
+        word-break: break-word;
+    }
+    
+    .error-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin: 2rem 0;
+    }
+    
+    .btn {
+        padding: 0.75rem 1.5rem;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+        background: #2aa7ff;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background: #1976d2;
+    }
+    
+    .btn-secondary {
+        background: transparent;
+        color: white;
+        border: 1px solid rgba(255,255,255,0.6);
+    }
+    
+    .btn-secondary:hover {
+        background: rgba(255,255,255,0.1);
+    }
+    
+    .error-help {
+        text-align: left;
+        margin-top: 2rem;
+    }
+    
+    .error-help h3 {
+        color: #2aa7ff;
+        margin-bottom: 1rem;
+    }
+    
+    .error-help ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    
+    .error-help li {
+        margin: 0.5rem 0;
+        padding-left: 1.5rem;
+        position: relative;
+    }
+    
+    .error-help li::before {
+        content: "•";
+        color: #2aa7ff;
+        position: absolute;
+        left: 0;
+    }
+</style>
+{% endblock %}

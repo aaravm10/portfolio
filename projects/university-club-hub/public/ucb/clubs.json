@@ -1,0 +1,246 @@
+[
+    {
+        "id": "00000000001",
+        "name": "Undergraduate Marketing Association",
+        "abbreviation": "UMA",
+        "description": "The Undergraduate Marketing Association at UC Berkeley is dedicated to providing a bridge between students and the marketing world. We offer professional development opportunities, networking events, and hands-on marketing experience to help students launch careers in brand management, digital marketing, and beyond.",
+        "tags": [
+            "business",
+            "academic"
+        ],
+        "majors": [
+            "BUSN",
+            "MKTG"
+        ],
+        "commitment": "weekly",
+        "color": "#003262",
+        "members": 80
+    },
+    {
+        "id": "00000000002",
+        "name": "Formula SAE",
+        "abbreviation": "FSAE",
+        "description": "Formula SAE at UC Berkeley designs, fabricates, and competes with small formula-style racecars against other colleges from around the world. Members gain hands-on engineering experience in mechanical design, manufacturing, and systems integration while competing at the collegiate level.",
+        "tags": [
+            "academic",
+            "engineering"
+        ],
+        "majors": [
+            "MECH",
+            "EECS",
+            "ENGIN"
+        ],
+        "commitment": "weekly",
+        "color": "#003262",
+        "members": 55
+    },
+    {
+        "id": "00000000003",
+        "name": "International Students Association at Berkeley",
+        "abbreviation": "ISAB",
+        "description": "ISAB aims to create a positive intellectual and social atmosphere for international students and stimulate cultural awareness among all members of the Berkeley community. We host cultural events, social mixers, and provide resources to help international students navigate life at UC Berkeley.",
+        "tags": [
+            "social",
+            "cultural"
+        ],
+        "majors": [],
+        "commitment": "weekly",
+        "color": "#003262",
+        "members": 90
+    },
+    {
+        "id": "00000000004",
+        "name": "180 Degrees Consulting at Berkeley",
+        "abbreviation": "180DC",
+        "description": "180 Degrees Consulting provides pro-bono consulting for nonprofits and social enterprises. We work with organizations to develop innovative strategies and solutions that drive meaningful social impact, while giving students real-world consulting experience.",
+        "tags": [
+            "business",
+            "service"
+        ],
+        "majors": [
+            "BUSN",
+            "ECON",
+            "POLS"
+        ],
+        "commitment": "weekly",
+        "color": "#003262",
+        "members": 45
+    },
+    {
+        "id": "00000000005",
+        "name": "Thrive Dance Company",
+        "abbreviation": "THRIVE",
+        "description": "Thrive Dance Company is UC Berkeley's original and premier contemporary dance group. Our goals are to promote the art of contemporary dance and to provide a collaborative, inclusive space for dancers of all backgrounds to grow as performers and artists.",
+        "tags": [
+            "arts",
+            "sports & recreation"
+        ],
+        "majors": [],
+        "commitment": "weekly",
+        "color": "#003262",
+        "members": 30
+    },
+    {
+        "id": "00000000006",
+        "name": "Space Enterprise at Berkeley",
+        "abbreviation": "SEB",
+        "description": "Space Enterprise at Berkeley is a liquid-fueled spaceshot rocketry team dedicated to designing and launching high-powered rockets. Members gain hands-on experience in aerospace engineering, propulsion systems, and project management while working toward ambitious launch goals.",
+        "tags": [
+            "academic",
+            "engineering"
+        ],
+        "majors": [
+            "MECH",
+            "EECS",
+            "ENGIN"
+        ],
+        "commitment": "weekly",
+        "color": "#003262",
+        "members": 40
+    },
+    {
+        "id": "00000000007",
+        "name": "Berkeley Women in Business",
+        "abbreviation": "BWIB",
+        "description": "The mission of Berkeley Women in Business is to empower the business leaders of tomorrow through leadership development and professional growth. We provide mentorship, networking opportunities, and events that connect members with industry professionals and like-minded peers.",
+        "tags": [
+            "business",
+            "academic"
+        ],
+        "majors": [
+            "BUSN",
+            "ECON"
+        ],
+        "commitment": "weekly",
+        "color": "#003262",
+        "members": 60
+    },
+    {
+        "id": "00000000008",
+        "name": "Codeology",
+        "abbreviation": "CODE",
+        "description": "Codeology aims to help students of all years and majors explore the tech industry. We offer personal projects to develop real-world experience, workshops on modern technologies, and a collaborative community for anyone interested in computer science and software development.",
+        "tags": [
+            "academic",
+            "engineering"
+        ],
+        "majors": [
+            "EECS",
+            "CS",
+            "COEN"
+        ],
+        "commitment": "weekly",
+        "color": "#003262",
+        "members": 70
+    },
+    {
+        "id": "00000000009",
+        "name": "Toastmasters on Campus",
+        "abbreviation": "TMC",
+        "description": "Toastmasters has been the world leader in teaching public speaking since 1924. Meetings are an enjoyable, self-paced course designed to help members develop communication and leadership skills in a supportive, welcoming environment open to all majors and experience levels.",
+        "tags": [
+            "academic",
+            "service"
+        ],
+        "majors": [],
+        "commitment": "weekly",
+        "color": "#003262",
+        "members": 25
+    },
+    {
+        "id": "00000000010",
+        "name": "The Berkeley Forum",
+        "abbreviation": "TBF",
+        "description": "The Berkeley Forum is a non-partisan forum for the expression and debate of a wide range of ideas. Founded in 2012, the Forum organizes speaker events, panels, and debates that bring distinguished thinkers and leaders to campus to engage with students on pressing global issues.",
+        "tags": [
+            "academic",
+            "service"
+        ],
+        "majors": [
+            "POLS",
+            "ECON",
+            "HIST"
+        ],
+        "commitment": "monthly",
+        "color": "#003262",
+        "members": 35
+    },
+    {
+        "id": "00000000011",
+        "name": "DeTrash at Berkeley",
+        "abbreviation": "DTRSH",
+        "description": "DeTrash at Berkeley organizes regular trash cleanup events to maintain and improve the campus and surrounding environment. The club fosters environmental stewardship and community pride while bringing together students who share a commitment to sustainability and civic responsibility.",
+        "tags": [
+            "service",
+            "social"
+        ],
+        "majors": [],
+        "commitment": "monthly",
+        "color": "#003262",
+        "members": 20
+    },
+    {
+        "id": "00000000012",
+        "name": "Surfrider Foundation Club at Berkeley",
+        "abbreviation": "SURF",
+        "description": "The Surfrider Foundation Club at Berkeley is dedicated to the protection and enjoyment of oceans, waves, and beaches through a powerful activist network focused on environmental sustainability, coastal preservation, and community education.",
+        "tags": [
+            "service",
+            "sports & recreation"
+        ],
+        "majors": [],
+        "commitment": "monthly",
+        "color": "#003262",
+        "members": 28
+    },
+    {
+        "id": "00000000013",
+        "name": "Bio-Inspired Design at Berkeley",
+        "abbreviation": "BIOD",
+        "description": "Bio-Inspired Design at Berkeley is a supportive community focused on the interdisciplinary principles of bio-inspired design. We use nature and biological systems as models to develop innovative engineering solutions, bringing together students from engineering, biology, and design backgrounds.",
+        "tags": [
+            "academic",
+            "engineering"
+        ],
+        "majors": [
+            "MECH",
+            "BIOE",
+            "ENGIN"
+        ],
+        "commitment": "weekly",
+        "color": "#003262",
+        "members": 30
+    },
+    {
+        "id": "00000000014",
+        "name": "Latino/a Students in Engineering and Science",
+        "abbreviation": "LAGSES",
+        "description": "LAGSES promotes the recruitment and retention of Latino/a graduate students in engineering and science at UC Berkeley. We provide mentorship, community, and professional development resources to help members thrive academically and build careers in STEM fields.",
+        "tags": [
+            "academic",
+            "cultural"
+        ],
+        "majors": [
+            "ENGIN",
+            "EECS",
+            "BIOE"
+        ],
+        "commitment": "monthly",
+        "color": "#003262",
+        "members": 22
+    },
+    {
+        "id": "00000000015",
+        "name": "BareStage Productions",
+        "abbreviation": "BARE",
+        "description": "BareStage Productions is a student-run theatre organization at UC Berkeley dedicated to producing high-quality theatrical performances. We welcome students of all experience levels to participate in acting, directing, stage management, set design, and all aspects of theatrical production.",
+        "tags": [
+            "theater",
+            "arts"
+        ],
+        "majors": [],
+        "commitment": "weekly",
+        "color": "#003262",
+        "members": 35
+    }
+]

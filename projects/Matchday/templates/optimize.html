@@ -1,0 +1,445 @@
+{% extends "base.html" %}
+
+{% block title %}Best XI Optimizer | MATCHDAY{% endblock %}
+
+{% block head %}
+<style>
+    body { background-color: #000000; }
+    .main { padding: 0; }
+
+    .optimize-section {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #000000 0%, #071421 100%);
+        padding: 100px 0 60px;
+    }
+
+    .optimize-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .optimize-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .optimize-header h1 {
+        font-size: 48px;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: 3px;
+        text-shadow: 0 0 40px rgba(42, 167, 255, 0.5);
+        margin: 0 0 10px 0;
+    }
+
+    .optimize-header .subtitle {
+        font-size: 14px;
+        color: rgba(255,255,255,0.6);
+        letter-spacing: 2px;
+    }
+
+    .panel {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 12px;
+        padding: 28px;
+        margin-bottom: 30px;
+    }
+
+    .panel-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: rgba(42, 167, 255, 0.9);
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+    }
+
+    /* Controls */
+    .controls-row {
+        display: flex;
+        gap: 20px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+    }
+
+    .control-field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .control-field label {
+        font-size: 11px;
+        letter-spacing: 1px;
+        color: rgba(255,255,255,0.6);
+        font-weight: 600;
+    }
+
+    .opt-select {
+        background: rgba(255,255,255,0.07);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        padding: 10px 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        cursor: pointer;
+        min-width: 160px;
+    }
+
+    .opt-select option { background: #0d1b2a; }
+
+    .budget-display {
+        font-size: 20px;
+        font-weight: 700;
+        color: #f6a019;
+        min-width: 80px;
+        text-align: center;
+    }
+
+    .budget-slider {
+        -webkit-appearance: none;
+        width: 220px;
+        height: 4px;
+        border-radius: 4px;
+        background: rgba(255,255,255,0.2);
+        outline: none;
+    }
+
+    .budget-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #f6a019;
+        cursor: pointer;
+    }
+
+    .build-btn {
+        background: rgba(42, 167, 255, 0.2);
+        border: 1px solid rgba(42, 167, 255, 0.6);
+        color: white;
+        padding: 10px 32px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .build-btn:hover { background: rgba(42, 167, 255, 0.35); }
+    .build-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .note-text {
+        font-size: 11px;
+        color: rgba(255,255,255,0.4);
+        margin-top: 6px;
+        letter-spacing: 0.5px;
+    }
+
+    /* Result summary */
+    .result-summary {
+        display: none;
+    }
+
+    .result-summary.show { display: block; }
+
+    .summary-stats {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+    }
+
+    .summary-stat {
+        background: rgba(255,255,255,0.05);
+        border-radius: 8px;
+        padding: 14px 20px;
+        text-align: center;
+        flex: 1;
+        min-width: 100px;
+    }
+
+    .summary-stat .val {
+        font-size: 22px;
+        font-weight: 700;
+        color: white;
+    }
+
+    .summary-stat .lbl {
+        font-size: 10px;
+        color: rgba(255,255,255,0.5);
+        letter-spacing: 1px;
+        margin-top: 4px;
+    }
+
+    .formation-label {
+        font-size: 28px;
+        font-weight: 700;
+        color: rgba(42, 167, 255, 0.9);
+        text-align: center;
+        letter-spacing: 4px;
+        margin-bottom: 24px;
+    }
+
+    /* Players by position */
+    .position-group {
+        margin-bottom: 20px;
+    }
+
+    .position-group-title {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: rgba(255,255,255,0.5);
+        margin-bottom: 10px;
+    }
+
+    .position-players {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+    }
+
+    .opt-player-card {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 10px;
+        padding: 14px 16px;
+        min-width: 160px;
+        flex: 1;
+        max-width: 220px;
+        transition: all 0.2s;
+    }
+
+    .opt-player-card:hover {
+        border-color: rgba(42,167,255,0.4);
+        background: rgba(255,255,255,0.08);
+    }
+
+    .opt-player-name {
+        font-size: 14px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .opt-player-team {
+        font-size: 11px;
+        color: rgba(255,255,255,0.5);
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+    }
+
+    .opt-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+    }
+
+    .opt-stat {
+        text-align: center;
+    }
+
+    .opt-stat-val {
+        font-size: 14px;
+        font-weight: 700;
+        color: white;
+    }
+
+    .opt-stat-lbl {
+        font-size: 9px;
+        color: rgba(255,255,255,0.4);
+        letter-spacing: 0.5px;
+    }
+
+    .opt-cost {
+        margin-top: 10px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #f6a019;
+        text-align: right;
+    }
+
+    .error-msg {
+        color: #f44336;
+        text-align: center;
+        padding: 20px;
+        font-size: 14px;
+    }
+
+    .loading-msg {
+        color: rgba(255,255,255,0.5);
+        text-align: center;
+        padding: 20px;
+        font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+        .optimize-container { padding: 0 1rem; }
+        .optimize-header h1 { font-size: 32px; }
+        .controls-row { flex-direction: column; }
+        .position-players { flex-direction: column; }
+        .opt-player-card { max-width: 100%; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="optimize-section">
+    <div class="optimize-container">
+        <!-- Header -->
+        <div class="optimize-header">
+            <h1>BEST XI OPTIMIZER</h1>
+            <div class="subtitle">MAX FPL POINTS WITHIN YOUR BUDGET</div>
+        </div>
+
+        <!-- Controls -->
+        <div class="panel">
+            <div class="panel-title">BUILD SETTINGS</div>
+            <div class="controls-row">
+                <div class="control-field">
+                    <label>FORMATION</label>
+                    <select class="opt-select" id="formationSelect">
+                        {% for f in formations %}
+                        <option value="{{ f }}" {% if f == '4-3-3' %}selected{% endif %}>{{ f }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="control-field">
+                    <label>BUDGET</label>
+                    <input type="range" class="budget-slider" id="budgetSlider"
+                           min="60" max="110" step="0.5" value="83"
+                           oninput="updateBudgetDisplay(this.value)">
+                    <div class="budget-display" id="budgetDisplay">&pound;83.0m</div>
+                </div>
+                <div class="control-field" style="justify-content: flex-end;">
+                    <button class="build-btn" id="buildBtn" onclick="buildXI()">OPTIMIZE XI</button>
+                </div>
+            </div>
+            <div class="note-text">Min. 450 minutes played &bull; Max 3 players per club &bull; Sorted by FPL points-per-cost value</div>
+        </div>
+
+        <!-- Result -->
+        <div class="panel result-summary" id="resultPanel">
+            <div id="resultContent"></div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// script for Best XI optimizer page
+// handles budget slider, form submission, and rendering optimization results
+
+function updateBudgetDisplay(val) {
+    // reflect slider value in budget label
+    document.getElementById('budgetDisplay').textContent = `\u00a3${parseFloat(val).toFixed(1)}m`;
+}
+
+// trigger optimization request when user clicks the button
+async function buildXI() {
+    const btn = document.getElementById('buildBtn');
+    const panel = document.getElementById('resultPanel');
+    const content = document.getElementById('resultContent');
+
+    btn.disabled = true;
+    panel.classList.add('show');
+    content.innerHTML = '<div class="loading-msg">Optimizing your XI...</div>';
+
+    const budget = parseFloat(document.getElementById('budgetSlider').value);
+    const formation = document.getElementById('formationSelect').value;
+
+    try {
+        const res = await fetch('/optimize/api/build', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({budget, formation})
+        });
+        const data = await res.json();
+
+        if (data.error) {
+            content.innerHTML = `<div class="error-msg">${data.error}</div>`;
+            return;
+        }
+
+        renderResult(data);
+    } catch (e) {
+        content.innerHTML = `<div class="error-msg">Error: ${e.message}</div>`;
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+function renderResult(data) {
+    const content = document.getElementById('resultContent');
+
+    const posOrder = ['GKP', 'DEF', 'MID', 'FWD'];
+    const byPos = {};
+    posOrder.forEach(p => byPos[p] = []);
+    data.players.forEach(p => { if (byPos[p.position]) byPos[p.position].push(p); });
+
+    const summaryHtml = `
+        <div class="formation-label">${data.formation}</div>
+        <div class="summary-stats">
+            <div class="summary-stat">
+                <div class="val">&pound;${data.total_cost}m</div>
+                <div class="lbl">TOTAL COST</div>
+            </div>
+            <div class="summary-stat">
+                <div class="val">&pound;${data.remaining_budget}m</div>
+                <div class="lbl">REMAINING</div>
+            </div>
+            <div class="summary-stat">
+                <div class="val">${data.total_points}</div>
+                <div class="lbl">PROJECTED PTS</div>
+            </div>
+        </div>
+    `;
+
+    const playersHtml = posOrder.map(pos => {
+        if (!byPos[pos] || byPos[pos].length === 0) return '';
+        const cards = byPos[pos].map(p => `
+            <div class="opt-player-card">
+                <div class="opt-player-name">${p.player_name}</div>
+                <div class="opt-player-team">${p.team}</div>
+                <div class="opt-stats">
+                    <div class="opt-stat">
+                        <div class="opt-stat-val">${p.total_points}</div>
+                        <div class="opt-stat-lbl">PTS</div>
+                    </div>
+                    <div class="opt-stat">
+                        <div class="opt-stat-val">${p.goals}</div>
+                        <div class="opt-stat-lbl">GOALS</div>
+                    </div>
+                    <div class="opt-stat">
+                        <div class="opt-stat-val">${p.assists}</div>
+                        <div class="opt-stat-lbl">ASSISTS</div>
+                    </div>
+                    <div class="opt-stat">
+                        <div class="opt-stat-val">${p.value}</div>
+                        <div class="opt-stat-lbl">VALUE</div>
+                    </div>
+                </div>
+                <div class="opt-cost">&pound;${p.now_cost}m</div>
+            </div>
+        `).join('');
+
+        return `
+            <div class="position-group">
+                <div class="position-group-title">${pos}</div>
+                <div class="position-players">${cards}</div>
+            </div>
+        `;
+    }).join('');
+
+    content.innerHTML = summaryHtml + playersHtml;
+}
+</script>
+{% endblock %}

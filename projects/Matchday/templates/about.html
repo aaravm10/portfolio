@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}About - MATCHDAY{% endblock %}
+
+{% block content %}
+<section class="page-section">
+    <div class="container">
+        <div class="page-header">
+            <h1>About MATCHDAY</h1>
+            <p class="page-subtitle">Premier League analytics platform</p>
+        </div>
+        
+        <div class="content-grid">
+            <div class="content-main">
+                <div class="card">
+                    <h2>What is MATCHDAY?</h2>
+                    <p>MATCHDAY is a comprehensive Premier League analytics platform that provides deep insights into player performance, statistics, and comparisons. Built for football enthusiasts, scouts, and analysts, our platform combines data from multiple sources to give you the most complete picture of English football.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>Features</h2>
+                    <ul class="feature-list">
+                        <li><strong>Player Database:</strong> Access detailed statistics for all Premier League players</li>
+                        <li><strong>Advanced Filtering:</strong> Filter by team, position, minutes played, and more</li>
+                        <li><strong>Statistical Analysis:</strong> View percentile rankings and performance metrics</li>
+                        <li><strong>Visual Analytics:</strong> Interactive radial charts showing player strengths</li>
+                        <li><strong>Player Comparison:</strong> Compare multiple players side by side</li>
+                        <li><strong>Real-time Data:</strong> Updated statistics from official sources</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h2>Data Sources</h2>
+                    <p>Our platform integrates data from:</p>
+                    <ul class="feature-list">
+                        <li><strong>Fantasy Premier League API:</strong> Official FPL statistics and player data</li>
+                        <li><strong>Understat:</strong> Advanced metrics including xG, xA, and shot data</li>
+                        <li><strong>Multiple Sources:</strong> Cross-referenced for accuracy and completeness</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="content-sidebar">
+                <div class="card">
+                    <h3>Get Started</h3>
+                    <p>Ready to explore Premier League analytics?</p>
+                    <a href="{{ url_for('dashboard.index') }}" class="btn btn-primary">Go to Dashboard</a>
+                </div>
+                
+                <div class="card">
+                    <h3>Technology</h3>
+                    <p>Built with modern web technologies:</p>
+                    <ul class="tech-list">
+                        <li>Python & Flask</li>
+                        <li>Pandas & NumPy</li>
+                        <li>Matplotlib</li>
+                        <li>HTML5 & CSS3</li>
+                        <li>JavaScript</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

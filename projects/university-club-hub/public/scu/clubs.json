@@ -1,0 +1,219 @@
+[
+    {
+        "id": "00000000001",
+        "name": "Society of Hispanic Professional Engineers",
+        "abbreviation": "SHPE",
+        "description": "SHPE-SCU is committed to empowering the Hispanic community in STEM fields. We offer mentorship, professional development, and networking opportunities to help our members succeed academically and professionally. Through our programs and initiatives, we aim to increase the representation of Hispanics in engineering and technology careers.",
+        "tags": [
+            "academic"
+        ],
+        "majors": [
+            "ENGR",
+            "CSCI",
+            "CSEN"
+        ],
+        "commitment": "weekly",
+        "color": "#A32035",
+        "members": 70
+    },
+    {
+        "id": "00000000002",
+        "name": "Society of Women Engineers",
+        "abbreviation": "SWE",
+        "tags": [
+            "academic",
+            "engineer"
+        ],
+        "majors": [
+            "CSEN",
+            "ECEN",
+            "MECH",
+            "CENG"
+        ],
+        "commitment": "weekly",
+        "description": "SWE-SCU is dedicated to supporting women in engineering and technology. We provide resources, networking opportunities, and mentorship to help women succeed in their academic and professional careers.",
+        "members": 40
+    },
+    {
+        "id": "00000000003",
+        "name": "Korean Student Association",
+        "abbreviation": "KSA",
+        "tags": [
+            "social",
+            "cultural"
+        ],
+        "majors": [],
+        "commitment": "weekly",
+        "description": "The purpose of Korean Student Association (KSA) shall be to unify students of Santa Clara University that identify ethnically as Korean while promoting Korean traditions and heritage to students who are interested in exploring and learning Korean culture.",
+        "members": 48
+    },
+    {
+        "id": "00000000004",
+        "name": "Latine Student Association",
+        "abbreviation": "LSU",
+        "tags": [
+            "social",
+            "cultural"
+        ],
+        "majors": [],
+        "commitment": "weekly",
+        "description": "We aim to unify and amplify the voices of the Latiné community and our allies, creating a safe, inclusive, and respectful space where we can organize together and empower one another. We strive to achieve this by fostering a supportive community of current SCU students, alumni, faculty, and staff, creating and maintaining open channels of communication to facilitate awareness, discussion, and activism within our community, and celebrating the diverse cultures and experiences across Latin America.",
+        "members": 20
+    },
+    {
+        "id": "00000000005",
+        "name": "American Society of Mechanical Engineers",
+        "abbreviation": "ASME",
+        "tags": [
+            "academic"
+        ],
+        "majors": [
+            "MECH"
+        ],
+        "commitment": "weekly",
+        "description": "The SCU chapter of ASME provides mechanical engineering students with opportunities to connect with their fellow classmates, learn new engineering skills, network with industry professionals, and give back to good causes. In keeping with our mission of bringing together the mechE community, we host numerous exciting professional and casual events, while also providing various career benefits and club merch.",
+        "members": 35
+    },
+    {
+        "id": "00000000006",
+        "name": "Delta Sigma Pi",
+        "abbreviation": "DSP",
+        "tags": [
+            "fraternity"
+        ],
+        "majors": [
+            "BUSN"
+        ],
+        "commitment": "monthly",
+        "description": "Delta Sigma Pi is a professional fraternity organized to foster the study of business in universities; to encourage scholarship, social activity and the association of students for their mutual advancement by research and practice; to promote closer affiliation between the commercial world and students of commerce, and to further a higher standard of commercial ethics and culture and the civic and commercial welfare of the community.",
+        "members": 65
+
+    },
+    {
+        "id": "00000000007",
+        "name": "Survivor: Santa Clara",
+        "abbreviation": "SURV",
+        "tags": [
+            "social",
+            "sports & recreation"
+        ],
+        "majors": [],
+        "commitment": "monthly",
+        "description": "Survivor: Santa Clara is a student organization that organizes a campus-wide game of Survivor. The game is designed to foster community and camaraderie among students while providing a fun and engaging experience. Participants compete in various challenges and activities, similar to the popular TV show, while also building friendships and creating lasting memories on campus.",
+        "members": 19
+    },
+    {
+        "id": "00000000008",
+        "name": "Association for Computing Machinery",
+        "abbreviation": "ACM",
+        "tags": [
+            "academic",
+            "engineer"
+        ],
+        "majors": [
+            "CSEN",
+            "ECEN"
+        ],
+        "commitment": "weekly",
+        "description": "ACM is Santa Clara's premiere organization for students passionate about the field of computer science and artificial intelligence (AI). Through workshops, hackathons, and projects, our goal for our members is to develop real-world CS skills and experience, to promote professional development through jobs and internships, and to cultivate a tight-knit, collaborative community.",
+        "members": 60
+    },
+    {
+        "id": "00000000009",
+        "name": "Barkada of SCU",
+        "abbreviation": "BARK",
+        "tags": [
+            "social",
+            "cultural"
+        ],
+        "majors": [],
+        "commitment": "weekly",
+        "description": "The mission of Barkada of Santa Clara University (hereinafter referred to as Barkada of SCU) is to promote the awareness of the Filipino culture and community on the SCU campus through education, networking, social justice, and social activities/events while upholding its heritage, traditions, and relationships.",
+        "members": 50
+    },
+    {
+        "id": "00000000010",
+        "name": "Psi Chi Honor Society",
+        "abbreviation": "PSI",
+        "tags": [
+            "academic"
+        ],
+        "majors": [
+            "PSYC"
+        ],
+        "commitment": "monthly",
+        "description": "Psi Chi is the International Honor Society in Psychology. The mission of Psi Chi is to encourage, stimulate, and maintain excellence in scholarship and advance the science of psychology. Psi Chi provides opportunities for students to engage in research, professional development, and community service within the field of psychology.",
+        "members": 30
+    },
+    {
+        "id": "00000000011",
+        "name": "Ethnic Studies Club",
+        "abbreviation": "ESC",
+        "tags": [
+            "service",
+            "cultural"
+        ],
+        "majors": [],
+        "commitment": "monthly",
+        "description": "Promotes the intellectual interest and development of students in all areas of Ethnic Studies. Creates a community of interaction for all who are interested in the field of Ethnic Studies. Support students in their academic endeavors and activities in the areas of Ethnic Studies.",
+        "members": 15
+    },
+    {
+        "id": "00000000012",
+        "name": "Men's Club Soccer",
+        "abbreviation": "MCS",
+        "tags": [
+            "sports & recreational"
+        ],
+        "majors": [],
+        "commitment": "weekly",
+        "description": "Men's Club Soccer is a student organization that provides an opportunity for students to participate in soccer games and tournaments. The club aims to promote physical fitness, teamwork, and sportsmanship among its members.",
+        "members": 25
+    },
+    {
+        "id": "00000000013",
+        "name": "Alpha Psi Omega",
+        "abbreviation": "APO",
+        "tags": [
+            "theater",
+            "fraternity"
+        ],
+        "majors": [],
+        "commitment": "monthly",
+        "description": "Alpha Psi Omega is a national theater honor society that recognizes outstanding achievement in the field of theater. The organization provides opportunities for students to engage in theatrical productions, develop their skills, and contribute to the campus arts community.",
+        "members": 20
+    },
+    {
+        "id": "00000000014",
+        "name": "Black Business Association",
+        "abbreviation": "BBA",
+        "tags": [
+            "business",
+            "cultural"
+        ],
+        "majors": [
+            "BUSN"
+        ],
+        "commitment": "weekly",
+        "description": "BBA's mission is to support African American/Black students and other underrepresented groups with their business affiliated aspirations through professional exposure, professional development opportunities, and community involvement",
+        "members": 30
+    },
+    {
+        "id": "00000000015",
+        "name": "Theta Tau",
+        "abbreviation": "THETA",
+        "tags": [
+            "engineer",
+            "fraternity"
+        ],
+        "majors": [
+            "CSEN",
+            "ECEN",
+            "MECH",
+            "CENG"
+        ],
+        "commitment": "weekly",
+        "description": "Theta Tau takes great pride in upholding and embracing our three pillars: professional development, brotherhood, and service. The Upsilon Epsilon chapter of Theta Tau is an inclusive community of engineers that all strive to motivate and elevate one another. Theta Tau cultivates an environment where engineers will excel professionally and academically, as well as form life-long friendships that transcend the college experience and are brought forth into the professional world.",
+        "members": 75
+    }
+]

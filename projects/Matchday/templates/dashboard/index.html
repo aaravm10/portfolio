@@ -1,0 +1,1320 @@
+{% extends "base.html" %} {% block title %}Dashboard - MATCHDAY{% endblock %} {%
+block head %}
+<style>
+  .dashboard-header {
+    background: linear-gradient(135deg, #071421 0%, #0a1a2a 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+  }
+
+  .dashboard-title {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .dashboard-subtitle {
+    margin: 0.5rem 0 0 0;
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  .filters-section {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filter-group label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+
+  .filter-group input,
+  .filter-group select {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+
+  .position-filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .position-checkbox {
+    position: relative;
+  }
+
+  .position-checkbox input {
+    display: none;
+  }
+
+  .position-checkbox label {
+    display: inline-block;
+    padding: 0.4rem 0.9rem;
+    border: 2px solid #ddd;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #666;
+    background: #f5f5f5;
+    transition: all 0.2s ease;
+    user-select: none;
+  }
+
+  .position-checkbox label:hover {
+    border-color: #37003c;
+    color: #37003c;
+  }
+
+  .position-checkbox input:checked + label {
+    background: #37003c;
+    color: white;
+    border-color: #37003c;
+  }
+
+  .data-section {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-title {
+    margin: 0 0 1rem 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .section-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .players-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .players-table th,
+  .players-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+
+  .players-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+    position: sticky;
+    top: 0;
+  }
+
+  .players-table tbody tr:hover {
+    background-color: #f8f9fa;
+    cursor: pointer;
+  }
+
+  .players-table tbody tr.selected {
+    background-color: #e3f2fd;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+  }
+
+  .stats-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2aa7ff;
+    margin: 0;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: #666;
+    margin: 0.25rem 0 0 0;
+  }
+
+  .player-details {
+    display: none;
+    margin-top: 2rem;
+  }
+
+  .player-details.show {
+    display: block;
+  }
+
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 1rem;
+  }
+
+  .tab {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    font-weight: 500;
+  }
+
+  .tab.active {
+    border-bottom-color: #2aa7ff;
+    color: #2aa7ff;
+  }
+
+  .tab-content {
+    display: none;
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+
+  .chart-container {
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .chart-container img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .compare-controls {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .compare-mode-toggle {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .compare-mode-btn {
+    border: 1px solid #ddd;
+    background: #f8f9fa;
+    color: #333;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .compare-mode-btn.active {
+    background: #2aa7ff;
+    color: white;
+    border-color: #2aa7ff;
+  }
+
+  .compare-input-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    align-items: end;
+  }
+
+  .compare-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .compare-card {
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    padding: 1rem;
+    background: #fafafa;
+  }
+
+  .compare-card h3 {
+    margin: 0 0 0.3rem 0;
+    font-size: 1.1rem;
+  }
+
+  .compare-subtitle {
+    margin: 0 0 0.9rem 0;
+    color: #666;
+    font-size: 0.85rem;
+  }
+
+  .compare-stat-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid #eee;
+    padding: 0.35rem 0;
+    font-size: 0.88rem;
+  }
+
+  .compare-stat-row strong {
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  .compare-value {
+    display: inline-block;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .compare-value.compare-better {
+    color: #1f7a37;
+    background: #e6f6eb;
+  }
+
+  .compare-value.compare-worse {
+    color: #6f6f6f;
+    background: #f5f5f5;
+  }
+
+  .compare-value.compare-tie {
+    color: #1a1a1a;
+    background: transparent;
+  }
+
+  .compare-error {
+    color: #b00020;
+    font-weight: 600;
+    margin-top: 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    .section-header-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .filters-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .dashboard-title {
+      font-size: 1.5rem;
+    }
+
+    .players-table {
+      font-size: 0.8rem;
+    }
+
+    .players-table th,
+    .players-table td {
+      padding: 0.5rem;
+    }
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="dashboard-header">
+  <div class="container">
+    <h1 class="dashboard-title">English Premier League Scouting Dashboard</h1>
+    <p class="dashboard-subtitle">
+      Last updated: {{ updated }} | {{ total_players }} players
+    </p>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Statistics Summary -->
+  <div class="stats-summary">
+    <div class="stat-card">
+      <h3 class="stat-value" id="totalPlayers">{{ total_players }}</h3>
+      <p class="stat-label">Total Players</p>
+    </div>
+    <div class="stat-card">
+      <h3 class="stat-value" id="filteredPlayers">{{ total_players }}</h3>
+      <p class="stat-label">Filtered Players</p>
+    </div>
+    <div class="stat-card">
+      <h3 class="stat-value">{{ teams|length }}</h3>
+      <p class="stat-label">Teams</p>
+    </div>
+    <div class="stat-card">
+      <h3 class="stat-value">4</h3>
+      <p class="stat-label">Positions</p>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-section">
+    <h2 class="section-title">Filters</h2>
+    <div class="filters-grid">
+      <div class="filter-group">
+        <label for="searchPlayer">Search Player</label>
+        <input type="text" id="searchPlayer" placeholder="Enter player name" />
+      </div>
+
+      <div class="filter-group">
+        <label for="teamSelect">Club</label>
+        <select id="teamSelect">
+          <option value="All">All Teams</option>
+          {% for team in teams %}
+          <option value="{{ team }}">{{ team }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="minutesMin">Min Minutes</label>
+        <input
+          type="range"
+          id="minutesMin"
+          min="0"
+          max="4000"
+          value="0"
+          step="10"
+        />
+        <span id="minutesValue">0</span>
+      </div>
+
+      <div class="filter-group">
+        <label for="sortBy">Sort By</label>
+        <select id="sortBy">
+          <option value="minutes">Minutes</option>
+          <option value="goals">Goals</option>
+          <option value="assists">Assists</option>
+          <option value="xG">xG</option>
+          <option value="xA">xA</option>
+          <option value="shots">Shots</option>
+          <option value="key_passes">Key Passes</option>
+          <option value="influence">Influence</option>
+          <option value="creativity">Creativity</option>
+          <option value="threat">Threat</option>
+          <option value="ict_index">ICT Index</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <label>Position</label>
+      <div class="position-filters">
+        <div class="position-checkbox">
+          <input type="checkbox" id="pos-GKP" value="GKP" checked />
+          <label for="pos-GKP">GKP</label>
+        </div>
+        <div class="position-checkbox">
+          <input type="checkbox" id="pos-DEF" value="DEF" checked />
+          <label for="pos-DEF">DEF</label>
+        </div>
+        <div class="position-checkbox">
+          <input type="checkbox" id="pos-MID" value="MID" checked />
+          <label for="pos-MID">MID</label>
+        </div>
+        <div class="position-checkbox">
+          <input type="checkbox" id="pos-FWD" value="FWD" checked />
+          <label for="pos-FWD">FWD</label>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 1rem">
+      <label>
+        <input type="checkbox" id="sortDesc" checked /> Sort Descending
+      </label>
+    </div>
+  </div>
+
+  <!-- Players Database -->
+  <div class="data-section">
+    <div class="section-header-row">
+      <h2 class="section-title" style="margin-bottom: 0">Database</h2>
+      <button class="compare-mode-btn" id="jumpToCompareBtn" type="button">
+        Go to Compare
+      </button>
+    </div>
+    <div id="playersTableContainer" style="overflow-x: auto; max-height: 600px">
+      <div class="loading">Loading players...</div>
+    </div>
+  </div>
+
+  <!-- Player Breakdown -->
+  <div class="player-details" id="playerDetails">
+    <div class="data-section">
+      <h2 class="section-title">Player Breakdown</h2>
+      <div id="playerInfo"></div>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="overview" onclick="showTab('overview', this)">Overview</button>
+        <button class="tab" data-tab="percentiles" onclick="showTab('percentiles', this)">Percentiles</button>
+        <button class="tab" data-tab="form" onclick="showTab('form', this); loadFormTab()">Form</button>
+        <button class="tab" data-tab="timeline" onclick="showTab('timeline', this); loadTimelineTab()">Timeline</button>
+        <button class="tab" data-tab="compare" onclick="showTab('compare', this)">Compare</button>
+        <button class="tab" data-tab="raw" onclick="showTab('raw', this)">Raw</button>
+      </div>
+
+      <div id="overview" class="tab-content active">
+        <div id="overviewContent"></div>
+      </div>
+
+      <div id="percentiles" class="tab-content">
+        <div id="percentilesContent"></div>
+      </div>
+
+      <div id="form" class="tab-content">
+        <div id="formContent"><div class="loading">Select a player first.</div></div>
+      </div>
+
+      <div id="timeline" class="tab-content">
+        <div id="timelineContent"><div class="loading">Select a player first.</div></div>
+      </div>
+
+      <div id="compare" class="tab-content">
+        <div id="compareContent">
+          <div class="compare-controls">
+            <div class="compare-mode-toggle">
+              <button
+                class="compare-mode-btn active"
+                id="compareModePlayers"
+                type="button"
+              >
+                Compare Players
+              </button>
+              <button
+                class="compare-mode-btn"
+                id="compareModeTeams"
+                type="button"
+              >
+                Compare Teams
+              </button>
+            </div>
+
+            <div class="compare-input-grid">
+              <div class="filter-group">
+                <label for="compareEntityA">Entity A</label>
+                <input
+                  type="text"
+                  id="compareEntityA"
+                  list="compareOptionsA"
+                  placeholder="Search and select"
+                />
+                <datalist id="compareOptionsA"></datalist>
+              </div>
+              <div class="filter-group">
+                <label for="compareEntityB">Entity B</label>
+                <input
+                  type="text"
+                  id="compareEntityB"
+                  list="compareOptionsB"
+                  placeholder="Search and select"
+                />
+                <datalist id="compareOptionsB"></datalist>
+              </div>
+              <div class="filter-group">
+                <button
+                  class="compare-mode-btn"
+                  id="runCompareBtn"
+                  type="button"
+                >
+                  Run Comparison
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="compare-error" id="compareError"></div>
+          <div id="compareResults"></div>
+        </div>
+      </div>
+
+      <div id="raw" class="tab-content">
+        <div id="rawContent"></div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  // dashboard page script: manages player filters, loading and comparison features
+  let currentPlayers = [];
+  let selectedPlayer = null;
+  let compareMode = "players";
+
+  // Initialize dashboard
+  document.addEventListener("DOMContentLoaded", function () {
+    // Set up event listeners
+    setupEventListeners();
+
+    // Load initial data
+    loadPlayers();
+
+    // Update minutes display
+    updateMinutesDisplay();
+
+    // Compare mode controls
+    initializeCompareFeature();
+  });
+
+  function setupEventListeners() {
+    // Filter controls
+    document
+      .getElementById("searchPlayer")
+      .addEventListener("input", debounce(loadPlayers, 300));
+    document
+      .getElementById("teamSelect")
+      .addEventListener("change", loadPlayers);
+    document
+      .getElementById("minutesMin")
+      .addEventListener("input", function () {
+        updateMinutesDisplay();
+        loadPlayers();
+      });
+    document.getElementById("sortBy").addEventListener("change", loadPlayers);
+    document.getElementById("sortDesc").addEventListener("change", loadPlayers);
+
+    // Position checkboxes
+    document
+      .querySelectorAll(".position-checkbox input")
+      .forEach((checkbox) => {
+        checkbox.addEventListener("change", loadPlayers);
+      });
+
+    const jumpToCompareBtn = document.getElementById("jumpToCompareBtn");
+    if (jumpToCompareBtn) {
+      jumpToCompareBtn.addEventListener("click", jumpToCompareTab);
+    }
+  }
+
+  function updateMinutesDisplay() {
+    const slider = document.getElementById("minutesMin");
+    const display = document.getElementById("minutesValue");
+    display.textContent = slider.value;
+  }
+
+  async function loadPlayers() {
+    const container = document.getElementById("playersTableContainer");
+    container.innerHTML = '<div class="loading">Loading players...</div>';
+
+    try {
+      // Build query parameters
+      const params = new URLSearchParams({
+        search: document.getElementById("searchPlayer").value,
+        team: document.getElementById("teamSelect").value,
+        minutes_min: document.getElementById("minutesMin").value,
+        sort_by: document.getElementById("sortBy").value,
+        sort_desc: document.getElementById("sortDesc").checked,
+      });
+
+      // Add position filters
+      const positions = [];
+      document
+        .querySelectorAll(".position-checkbox input:checked")
+        .forEach((cb) => {
+          positions.push(cb.value);
+        });
+      positions.forEach((pos) => {
+        params.append("position", pos);
+      });
+
+      const response = await fetch(`/dashboard/api/players?${params}`);
+      const data = await response.json();
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      currentPlayers = data.players;
+      renderPlayersTable(data.players);
+
+      // Update filtered count
+      document.getElementById("filteredPlayers").textContent = data.filtered;
+    } catch (error) {
+      container.innerHTML = `<div class="loading" style="color: red;">Error: ${error.message}</div>`;
+    }
+  }
+
+  function renderPlayersTable(players) {
+    const container = document.getElementById("playersTableContainer");
+
+    if (players.length === 0) {
+      container.innerHTML =
+        '<div class="loading">No players match the current filters</div>';
+      return;
+    }
+
+    const table = document.createElement("table");
+    table.className = "players-table";
+
+    // Headers
+    const headers = [
+      "Player",
+      "Team",
+      "Pos",
+      "Min",
+      "Goals",
+      "Assists",
+      "xG",
+      "xA",
+      "Shots",
+      "KP",
+      "Inf",
+      "Cre",
+      "Thr",
+      "ICT",
+    ];
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+
+    headers.forEach((header) => {
+      const th = document.createElement("th");
+      th.textContent = header;
+      headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    // Body
+    const tbody = document.createElement("tbody");
+    players.forEach((player) => {
+      const row = document.createElement("tr");
+      row.addEventListener("click", () => selectPlayer(player, row));
+
+      const values = [
+        player.player_name,
+        player.team_short,
+        player.position,
+        Math.round(player.minutes || 0),
+        Math.round((player.goals || 0) * 10) / 10,
+        Math.round((player.assists || 0) * 10) / 10,
+        Math.round((player.xG || 0) * 10) / 10,
+        Math.round((player.xA || 0) * 10) / 10,
+        Math.round(player.shots || 0),
+        Math.round(player.key_passes || 0),
+        Math.round((player.influence || 0) * 10) / 10,
+        Math.round((player.creativity || 0) * 10) / 10,
+        Math.round((player.threat || 0) * 10) / 10,
+        Math.round((player.ict_index || 0) * 10) / 10,
+      ];
+
+      values.forEach((value) => {
+        const td = document.createElement("td");
+        td.textContent = value;
+        row.appendChild(td);
+      });
+
+      tbody.appendChild(row);
+    });
+
+    table.appendChild(tbody);
+    container.innerHTML = "";
+    container.appendChild(table);
+  }
+
+  function selectPlayer(player, row) {
+    // Remove previous selection
+    document.querySelectorAll(".players-table tbody tr").forEach((r) => {
+      r.classList.remove("selected");
+    });
+
+    // Add selection to current row
+    row.classList.add("selected");
+
+    selectedPlayer = player.player_name;
+    loadPlayerDetails(player.player_name);
+
+    // Show player details section
+    document.getElementById("playerDetails").classList.add("show");
+  }
+
+  async function loadPlayerDetails(playerName) {
+    try {
+      const response = await fetch(
+        `/dashboard/api/player/${encodeURIComponent(playerName)}`,
+      );
+      const data = await response.json();
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      await renderPlayerInfo(data.player_info);
+      renderOverview(data.overview);
+      renderPercentiles(data.percentiles, playerName);
+      renderRawData(data);
+    } catch (error) {
+      document.getElementById("playerInfo").innerHTML =
+        `<div style="color: red;">Error loading player details: ${error.message}</div>`;
+    }
+  }
+
+  async function renderPlayerInfo(playerInfo) {
+    // Check watchlist status
+    let inWatchlist = false;
+    try {
+      const wRes = await fetch(`/dashboard/api/watchlist-status?player_name=${encodeURIComponent(playerInfo.name)}`);
+      const wData = await wRes.json();
+      inWatchlist = wData.in_watchlist;
+    } catch (e) { /* ignore */ }
+
+    const container = document.getElementById("playerInfo");
+    container.innerHTML = `
+        <div style="display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center;">
+            <div class="stat-card">
+                <h3 class="stat-value">${playerInfo.team}</h3>
+                <p class="stat-label">Club</p>
+            </div>
+            <div class="stat-card">
+                <h3 class="stat-value">${playerInfo.position}</h3>
+                <p class="stat-label">Position</p>
+            </div>
+            <div class="stat-card">
+                <h3 class="stat-value">${playerInfo.minutes}</h3>
+                <p class="stat-label">Minutes</p>
+            </div>
+            <div class="stat-card">
+                <h3 class="stat-value">${playerInfo.starts}</h3>
+                <p class="stat-label">Starts</p>
+            </div>
+            <button id="watchlistBtn" onclick="toggleWatchlist('${playerInfo.name.replace(/'/g, "\\'")}')"
+                style="padding:0.5rem 1.2rem;border-radius:20px;border:2px solid ${inWatchlist ? '#2aa7ff' : '#ddd'};
+                background:${inWatchlist ? '#e3f2fd' : '#f5f5f5'};cursor:pointer;font-weight:700;
+                color:${inWatchlist ? '#2aa7ff' : '#666'};transition:all 0.2s;font-size:0.85rem;">
+                ${inWatchlist ? '★ Watchlisted' : '☆ Watchlist'}
+            </button>
+        </div>
+    `;
+  }
+
+  async function toggleWatchlist(playerName) {
+    try {
+      const res = await fetch('/watchlist/api/toggle', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({player_name: playerName})
+      });
+      const data = await res.json();
+      const btn = document.getElementById('watchlistBtn');
+      if (btn) {
+        btn.textContent = data.in_watchlist ? '★ Watchlisted' : '☆ Watchlist';
+        btn.style.borderColor = data.in_watchlist ? '#2aa7ff' : '#ddd';
+        btn.style.background = data.in_watchlist ? '#e3f2fd' : '#f5f5f5';
+        btn.style.color = data.in_watchlist ? '#2aa7ff' : '#666';
+      }
+    } catch (e) { console.error('Watchlist toggle failed:', e); }
+  }
+
+  function renderOverview(overview) {
+    const container = document.getElementById("overviewContent");
+    const table = document.createElement("table");
+    table.className = "players-table";
+    table.style.maxWidth = "400px";
+
+    const thead = document.createElement("thead");
+    thead.innerHTML = "<tr><th>Metric</th><th>Value</th></tr>";
+    table.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+    overview.forEach((item) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+            <td>${item.metric}</td>
+            <td>${Math.round((item.value || 0) * 100) / 100}</td>
+        `;
+      tbody.appendChild(row);
+    });
+
+    table.appendChild(tbody);
+    container.innerHTML = "";
+    container.appendChild(table);
+  }
+
+  async function renderPercentiles(percentiles, playerName) {
+    const container = document.getElementById("percentilesContent");
+    container.innerHTML = '<div class="loading">Loading chart...</div>';
+
+    try {
+      // Load chart
+      const response = await fetch(
+        `/dashboard/api/player/${encodeURIComponent(playerName)}/chart`,
+      );
+      const data = await response.json();
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      container.innerHTML = `
+            <div class="chart-container">
+                <h3>${data.player_name} · ${data.team} · ${data.position}</h3>
+                <img src="data:image/png;base64,${data.chart_data}" alt="Player radial chart">
+            </div>
+        `;
+
+      // Add percentiles table
+      const table = document.createElement("table");
+      table.className = "players-table";
+      table.style.maxWidth = "500px";
+      table.style.marginTop = "1rem";
+
+      const thead = document.createElement("thead");
+      thead.innerHTML =
+        "<tr><th>Metric</th><th>Percentile</th><th>Value</th></tr>";
+      table.appendChild(thead);
+
+      const tbody = document.createElement("tbody");
+      percentiles.forEach((item) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+                <td>${item.metric}</td>
+                <td>${Math.round(item.percentile || 0)}%</td>
+                <td>${Math.round((item.value || 0) * 100) / 100}</td>
+            `;
+        tbody.appendChild(row);
+      });
+
+      table.appendChild(tbody);
+      container.appendChild(table);
+    } catch (error) {
+      container.innerHTML = `<div style="color: red;">Error loading chart: ${error.message}</div>`;
+    }
+  }
+
+  function renderRawData(data) {
+    const container = document.getElementById("rawContent");
+    container.innerHTML = `<pre>${JSON.stringify(data.player_info, null, 2)}</pre>`;
+  }
+
+  function initializeCompareFeature() {
+    const playersBtn = document.getElementById("compareModePlayers");
+    const teamsBtn = document.getElementById("compareModeTeams");
+    const inputA = document.getElementById("compareEntityA");
+    const inputB = document.getElementById("compareEntityB");
+    const runBtn = document.getElementById("runCompareBtn");
+
+    if (!playersBtn || !teamsBtn || !inputA || !inputB || !runBtn) {
+      return;
+    }
+
+    playersBtn.addEventListener("click", () => setCompareMode("players"));
+    teamsBtn.addEventListener("click", () => setCompareMode("teams"));
+
+    inputA.addEventListener(
+      "input",
+      debounce(() => loadCompareOptions("A"), 250),
+    );
+    inputB.addEventListener(
+      "input",
+      debounce(() => loadCompareOptions("B"), 250),
+    );
+
+    runBtn.addEventListener("click", runComparison);
+
+    setCompareMode("players");
+  }
+
+  function setCompareMode(mode) {
+    compareMode = mode;
+
+    const playersBtn = document.getElementById("compareModePlayers");
+    const teamsBtn = document.getElementById("compareModeTeams");
+    const inputA = document.getElementById("compareEntityA");
+    const inputB = document.getElementById("compareEntityB");
+
+    if (!playersBtn || !teamsBtn || !inputA || !inputB) {
+      return;
+    }
+
+    playersBtn.classList.toggle("active", mode === "players");
+    teamsBtn.classList.toggle("active", mode === "teams");
+
+    const label = mode === "players" ? "player" : "team";
+    inputA.value = "";
+    inputB.value = "";
+    inputA.placeholder = `Search ${label} A`;
+    inputB.placeholder = `Search ${label} B`;
+
+    clearCompareError();
+    renderCompareCards(null);
+    loadCompareOptions("A");
+    loadCompareOptions("B");
+  }
+
+  async function loadCompareOptions(target) {
+    const input = document.getElementById(
+      target === "A" ? "compareEntityA" : "compareEntityB",
+    );
+    const list = document.getElementById(
+      target === "A" ? "compareOptionsA" : "compareOptionsB",
+    );
+
+    if (!input || !list) {
+      return;
+    }
+
+    try {
+      const query = encodeURIComponent(input.value || "");
+      const response = await fetch(
+        `/dashboard/api/compare/options?mode=${compareMode}&query=${query}`,
+      );
+      const data = await response.json();
+
+      if (!response.ok || data.error) {
+        throw new Error(data.error || "Failed to load options");
+      }
+
+      list.innerHTML = "";
+      data.options.forEach((option) => {
+        const item = document.createElement("option");
+        item.value = option;
+        list.appendChild(item);
+      });
+    } catch (error) {
+      showCompareError(error.message);
+    }
+  }
+
+  async function runComparison() {
+    const a = (document.getElementById("compareEntityA")?.value || "").trim();
+    const b = (document.getElementById("compareEntityB")?.value || "").trim();
+
+    clearCompareError();
+
+    if (!a || !b) {
+      showCompareError("Please select both entities to compare.");
+      return;
+    }
+
+    if (a.toLowerCase() === b.toLowerCase()) {
+      showCompareError("Compared entities cannot be the same.");
+      return;
+    }
+
+    try {
+      const params = new URLSearchParams({
+        mode: compareMode,
+        entity_a: a,
+        entity_b: b,
+      });
+
+      const response = await fetch(
+        `/dashboard/api/compare?${params.toString()}`,
+      );
+      const data = await response.json();
+
+      if (!response.ok || data.error) {
+        throw new Error(data.error || "Comparison failed");
+      }
+
+      renderCompareCards(data);
+    } catch (error) {
+      renderCompareCards(null);
+      showCompareError(error.message);
+    }
+  }
+
+  function renderCompareCards(data) {
+    const container = document.getElementById("compareResults");
+    if (!container) {
+      return;
+    }
+
+    if (!data) {
+      container.innerHTML = "";
+      return;
+    }
+
+    const rowsA = data.stats
+      .map((stat) => {
+        const status = getComparisonStatus(
+          stat.metric,
+          stat.value_a,
+          stat.value_b,
+        );
+        return `<div class="compare-stat-row"><span>${formatMetric(stat.metric)}</span><strong class="compare-value ${status.classA}">${formatStatValue(stat.value_a)}</strong></div>`;
+      })
+      .join("");
+
+    const rowsB = data.stats
+      .map((stat) => {
+        const status = getComparisonStatus(
+          stat.metric,
+          stat.value_a,
+          stat.value_b,
+        );
+        return `<div class="compare-stat-row"><span>${formatMetric(stat.metric)}</span><strong class="compare-value ${status.classB}">${formatStatValue(stat.value_b)}</strong></div>`;
+      })
+      .join("");
+
+    container.innerHTML = `
+        <div class="compare-cards">
+            <div class="compare-card">
+                <h3>${data.entity_a.name}</h3>
+                <p class="compare-subtitle">${data.entity_a.subtitle}</p>
+                ${rowsA}
+            </div>
+            <div class="compare-card">
+                <h3>${data.entity_b.name}</h3>
+                <p class="compare-subtitle">${data.entity_b.subtitle}</p>
+                ${rowsB}
+            </div>
+        </div>
+    `;
+  }
+
+  function formatMetric(metric) {
+    return metric
+      .replace(/_/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  }
+
+  function getComparisonStatus(metric, valueA, valueB) {
+    const a = Number(valueA);
+    const b = Number(valueB);
+
+    if (Number.isNaN(a) || Number.isNaN(b)) {
+      return { classA: "compare-tie", classB: "compare-tie" };
+    }
+
+    if (a === b) {
+      return { classA: "compare-tie", classB: "compare-tie" };
+    }
+
+    const lowerIsBetter = isLowerBetterMetric(metric);
+    const aIsBetter = lowerIsBetter ? a < b : a > b;
+
+    return aIsBetter
+      ? { classA: "compare-better", classB: "compare-worse" }
+      : { classA: "compare-worse", classB: "compare-better" };
+  }
+
+  function isLowerBetterMetric(metric) {
+    const lowerBetterMetrics = [
+      "yellow_cards",
+      "yellow_cards_p90",
+      "red_cards",
+      "red_cards_p90",
+      "goals_conceded",
+      "goals_conceded_p90",
+    ];
+    return lowerBetterMetrics.includes(metric);
+  }
+
+  function formatStatValue(value) {
+    const number = Number(value);
+    if (Number.isNaN(number)) {
+      return value;
+    }
+    return Number.isInteger(number) ? number : number.toFixed(2);
+  }
+
+  function showCompareError(message) {
+    const element = document.getElementById("compareError");
+    if (element) {
+      element.textContent = message;
+    }
+  }
+
+  function clearCompareError() {
+    const element = document.getElementById("compareError");
+    if (element) {
+      element.textContent = "";
+    }
+  }
+
+  function jumpToCompareTab() {
+    const details = document.getElementById("playerDetails");
+    if (details) {
+      details.classList.add("show");
+    }
+    showTab("compare");
+    const compareSection = document.getElementById("compareContent");
+    if (compareSection) {
+      compareSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
+  function showTab(tabName, triggerEl = null) {
+    // Hide all tabs
+    document.querySelectorAll(".tab-content").forEach((content) => {
+      content.classList.remove("active");
+    });
+    document.querySelectorAll(".tab").forEach((tab) => {
+      tab.classList.remove("active");
+    });
+
+    // Show selected tab
+    document.getElementById(tabName).classList.add("active");
+    const activeButton =
+      triggerEl || document.querySelector(`.tab[data-tab="${tabName}"]`);
+    if (activeButton) {
+      activeButton.classList.add("active");
+    }
+  }
+
+  // Utility function for debouncing
+  function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+
+  // ── Form Tab ──────────────────────────────────────────────────
+  let formLoaded = false;
+  async function loadFormTab() {
+    if (!selectedPlayer || formLoaded) return;
+    formLoaded = true;
+    const container = document.getElementById("formContent");
+    container.innerHTML = '<div class="loading">Loading form data...</div>';
+    try {
+      const res = await fetch(`/dashboard/api/player/${encodeURIComponent(selectedPlayer)}/form`);
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+
+      const gws = data.gws || [];
+      if (gws.length === 0) {
+        container.innerHTML = '<div class="loading">No recent gameweek data found.</div>';
+        return;
+      }
+
+      const summaryHtml = `
+        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+          <div class="stat-card"><h3 class="stat-value">${data.avg_goals}</h3><p class="stat-label">Avg Goals/GW</p></div>
+          <div class="stat-card"><h3 class="stat-value">${data.avg_assists}</h3><p class="stat-label">Avg Assists/GW</p></div>
+          <div class="stat-card"><h3 class="stat-value">${data.avg_points}</h3><p class="stat-label">Avg Pts/GW</p></div>
+          <div class="stat-card"><h3 class="stat-value">${Math.round(data.avg_minutes)}</h3><p class="stat-label">Avg Minutes/GW</p></div>
+        </div>`;
+
+      const rows = gws.map(gw => `
+        <tr>
+          <td>GW${gw.round}</td>
+          <td>${gw.minutes}'</td>
+          <td>${gw.goals}</td>
+          <td>${gw.assists}</td>
+          <td>${gw.clean_sheets}</td>
+          <td><strong>${gw.points}</strong></td>
+        </tr>`).join('');
+
+      container.innerHTML = summaryHtml + `
+        <table class="players-table" style="max-width:480px;">
+          <thead><tr><th>GW</th><th>Min</th><th>G</th><th>A</th><th>CS</th><th>Pts</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+    } catch (e) {
+      container.innerHTML = `<div style="color:red;">Error: ${e.message}</div>`;
+    }
+  }
+
+  // ── Timeline Tab ──────────────────────────────────────────────
+  let timelineLoaded = false;
+  async function loadTimelineTab() {
+    if (!selectedPlayer || timelineLoaded) return;
+    timelineLoaded = true;
+    const container = document.getElementById("timelineContent");
+    container.innerHTML = '<div class="loading">Loading timeline...</div>';
+    try {
+      const res = await fetch(`/dashboard/api/player/${encodeURIComponent(selectedPlayer)}/timeline`);
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+
+      const tl = data.timeline || [];
+      if (tl.length === 0) {
+        container.innerHTML = '<div class="loading">No timeline data found.</div>';
+        return;
+      }
+
+      // Simple SVG line chart
+      const W = 560, H = 200, PAD = 36;
+      const maxGw = tl[tl.length - 1].round;
+      const maxGoals = Math.max(...tl.map(d => d.cumulative_goals), 1);
+      const maxAssists = Math.max(...tl.map(d => d.cumulative_assists), 1);
+      const maxY = Math.max(maxGoals, maxAssists);
+
+      const scaleX = r => PAD + ((r - 1) / Math.max(maxGw - 1, 1)) * (W - PAD * 2);
+      const scaleY = v => H - PAD - (v / maxY) * (H - PAD * 2);
+
+      const goalsPath = tl.map((d, i) => `${i === 0 ? 'M' : 'L'}${scaleX(d.round)},${scaleY(d.cumulative_goals)}`).join(' ');
+      const assistsPath = tl.map((d, i) => `${i === 0 ? 'M' : 'L'}${scaleX(d.round)},${scaleY(d.cumulative_assists)}`).join(' ');
+
+      container.innerHTML = `
+        <p style="font-size:0.85rem;color:#666;margin-bottom:0.5rem;">Cumulative season totals per gameweek</p>
+        <svg width="${W}" height="${H}" style="overflow:visible;max-width:100%;">
+          <line x1="${PAD}" y1="${H - PAD}" x2="${W - PAD}" y2="${H - PAD}" stroke="#ddd" stroke-width="1"/>
+          <line x1="${PAD}" y1="${PAD}" x2="${PAD}" y2="${H - PAD}" stroke="#ddd" stroke-width="1"/>
+          <path d="${goalsPath}" fill="none" stroke="#f6a019" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="${assistsPath}" fill="none" stroke="#2aa7ff" stroke-width="2.5" stroke-linejoin="round"/>
+          ${tl.map(d => `<circle cx="${scaleX(d.round)}" cy="${scaleY(d.cumulative_goals)}" r="3" fill="#f6a019" opacity="0.7"/>`).join('')}
+          ${tl.map(d => `<circle cx="${scaleX(d.round)}" cy="${scaleY(d.cumulative_assists)}" r="3" fill="#2aa7ff" opacity="0.7"/>`).join('')}
+        </svg>
+        <div style="display:flex;gap:1.5rem;margin-top:0.5rem;font-size:0.8rem;">
+          <span style="color:#f6a019;">&#9644; Goals</span>
+          <span style="color:#2aa7ff;">&#9644; Assists</span>
+        </div>
+        <div style="margin-top:1rem;font-size:0.85rem;color:#555;">
+          Season totals: <strong>${tl[tl.length-1].cumulative_goals}</strong> goals &bull;
+          <strong>${tl[tl.length-1].cumulative_assists}</strong> assists &bull;
+          <strong>${tl[tl.length-1].cumulative_points}</strong> FPL pts
+        </div>`;
+    } catch (e) {
+      container.innerHTML = `<div style="color:red;">Error: ${e.message}</div>`;
+    }
+  }
+
+  // Reset form/timeline loaded flags when a new player is selected
+  const _origLoadPlayerDetails = loadPlayerDetails;
+  loadPlayerDetails = async function(playerName) {
+    formLoaded = false;
+    timelineLoaded = false;
+    document.getElementById("formContent").innerHTML = '<div class="loading">Click the Form tab to load.</div>';
+    document.getElementById("timelineContent").innerHTML = '<div class="loading">Click the Timeline tab to load.</div>';
+    return _origLoadPlayerDetails(playerName);
+  };
+</script>
+{% endblock %}

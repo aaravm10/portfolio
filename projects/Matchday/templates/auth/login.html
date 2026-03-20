@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Login - MATCHDAY{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="container">
+        <div class="auth-container">
+            <div class="auth-card">
+                <h1>Log In</h1>
+                <p class="auth-subtitle">Access your MATCHDAY account</p>
+                
+                <form id="loginForm" method="POST" action="{{ url_for('auth.login') }}">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required autocomplete="username">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required autocomplete="current-password">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-full">Log In</button>
+                </form>
+                
+                <p class="auth-links">
+                    Don't have an account? <a href="{{ url_for('auth.register') }}">Sign up</a>
+                </p>
+                
+                <p class="auth-links">
+                    <a href="{{ url_for('main.home') }}">← Back to Home</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    
+    // Show loading state
+    submitBtn.textContent = 'Logging in...';
+    submitBtn.disabled = true;
+    
+    try {
+        const response = await fetch('{{ url_for("auth.login") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: formData.get('username'),
+                password: formData.get('password')
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Show success message and redirect
+            showMessage(result.message, 'success');
+            setTimeout(() => {
+                window.location.href = '{{ url_for("main.home") }}';
+            }, 1000);
+        } else {
+            showMessage(result.message, 'error');
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }
+    } catch (error) {
+        showMessage('An error occurred. Please try again.', 'error');
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    }
+});
+
+function showMessage(message, type) {
+    const flashContainer = document.querySelector('.flash-messages') || createFlashContainer();
+    const flashMessage = document.createElement('div');
+    flashMessage.className = `flash-message flash-${type}`;
+    flashMessage.innerHTML = `
+        <span>${message}</span>
+        <button class="flash-close" onclick="this.parentElement.remove()">&times;</button>
+    `;
+    flashContainer.appendChild(flashMessage);
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+        flashMessage.remove();
+    }, 5000);
+}
+
+function createFlashContainer() {
+    const container = document.createElement('div');
+    container.className = 'flash-messages';
+    container.innerHTML = '<div class="container"></div>';
+    document.body.insertBefore(container, document.querySelector('.main'));
+    return container.querySelector('.container');
+}
+</script>
+{% endblock %}

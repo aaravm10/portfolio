@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+
+{% block title %}Help & FAQ - MATCHDAY{% endblock %}
+
+{% block head %}
+<style>
+    .help-section {
+        min-height: calc(100vh - 140px);
+        background: linear-gradient(135deg, #000000 0%, #071421 100%);
+        padding: 120px 0 60px;
+    }
+
+    .help-header {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .help-header h1 {
+        font-size: 48px;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: 3px;
+        margin-bottom: 15px;
+    }
+
+    .help-subtitle {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.6);
+        letter-spacing: 1px;
+    }
+
+    .help-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .help-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        margin-bottom: 80px;
+    }
+
+    .faq-category {
+        margin-bottom: 40px;
+    }
+
+    .faq-category-title {
+        font-size: 14px;
+        letter-spacing: 2px;
+        color: rgba(42, 167, 255, 0.9);
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .faq-item {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        margin-bottom: 15px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .faq-item:hover {
+        border-color: rgba(42, 167, 255, 0.3);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .faq-question {
+        padding: 18px 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+    }
+
+    .faq-question-text {
+        font-size: 14px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.9);
+        letter-spacing: 0.5px;
+    }
+
+    .faq-toggle {
+        font-size: 20px;
+        color: rgba(42, 167, 255, 0.7);
+        transition: transform 0.3s ease;
+    }
+
+    .faq-item.active .faq-toggle {
+        transform: rotate(45deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .faq-answer-text {
+        padding: 0 20px 18px 20px;
+        font-size: 13px;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .faq-item.active .faq-answer {
+        max-height: 500px;
+    }
+
+    .contact-section {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 40px;
+    }
+
+    .contact-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+    }
+
+    .contact-subtitle {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 12px;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px 15px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 4px;
+        font-size: 14px;
+        color: #ffffff;
+        transition: all 0.3s ease;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: rgba(42, 167, 255, 0.5);
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 120px;
+        font-family: inherit;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 14px;
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        color: white;
+        font-size: 12px;
+        letter-spacing: 2px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        border-radius: 4px;
+    }
+
+    .submit-btn:hover {
+        background: rgba(42, 167, 255, 0.1);
+        border-color: rgba(42, 167, 255, 0.8);
+    }
+
+    @media (max-width: 768px) {
+        .help-grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+        .help-header h1 {
+            font-size: 36px;
+        }
+        .contact-section {
+            padding: 30px 20px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="help-section">
+    <div class="help-container">
+        <!-- Header -->
+        <div class="help-header">
+            <h1>HELP CENTER</h1>
+            <p class="help-subtitle">Frequently asked questions and support</p>
+        </div>
+
+        <!-- FAQ + Contact Grid -->
+        <div class="help-grid">
+            <!-- FAQ Categories -->
+            <div class="faq-section">
+                {% for category, questions in faqs.items() %}
+                <div class="faq-category">
+                    <h3 class="faq-category-title">{{ category }}</h3>
+                    {% for faq in questions %}
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span class="faq-question-text">{{ faq.question }}</span>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p class="faq-answer-text">{{ faq.answer }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Contact Form -->
+            <div class="contact-section">
+                <h2 class="contact-title">Still Need Help?</h2>
+                <p class="contact-subtitle">Send us a message and we'll get back to you within 24-48 hours.</p>
+                <form action="{{ url_for('help.submit_contact') }}" method="POST">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" placeholder="Your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">Select a topic...</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="bug">Report a Bug</option>
+                            <option value="feature">Feature Request</option>
+                            <option value="account">Account Issue</option>
+                            <option value="data">Data Question</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Tell us how we can help..." required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // expand/collapse one FAQ item at a time
+    function toggleFaq(element) {
+        const faqItem = element.parentElement;
+        const wasActive = faqItem.classList.contains('active');
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        if (!wasActive) {
+            faqItem.classList.add('active');
+        }
+    }
+</script>
+{% endblock %}

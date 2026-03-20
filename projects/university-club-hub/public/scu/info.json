@@ -1,0 +1,34 @@
+{
+    "abbreviation": "SCU",
+    "name": "Santa Clara University",
+    "primary-color": "#A32035",
+    "secondary-color": "#E9E9E9",
+    "accent-color": "#82181a",
+    "secondary-text-color": "#8E8E93",
+    "slogan": "Be a Bronco. Get involved.",
+    "majors": {
+        "BUSN": "Business",
+        "CENG": "Civil Engineering",
+        "CSCI": "Computer Science",
+        "CSEN": "Computer Engineering",
+        "ECEN": "Electrical Engineering",
+        "ENGR": "General Engineering",
+        "MECH": "Mechanical Engineering",
+        "PSYC": "Psychology"
+    },
+    "tags": {
+        "academic": "Academic",
+        "business": "Business",
+        "cultural": "Cultural",
+        "engineer": "Engineer",
+        "fraternity": "Fraternity",
+        "service": "Service",
+        "social": "Social",
+        "sports & recreation": "Sports & Recreation",
+        "theater": "Theater"
+    },
+    "commitments": {
+        "weekly": "Weekly",
+        "monthly": "Monthly"
+    }
+}

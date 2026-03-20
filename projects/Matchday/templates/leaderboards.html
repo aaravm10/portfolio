@@ -1,0 +1,419 @@
+{% extends "base.html" %}
+
+{% block title %}Leaderboards | MATCHDAY{% endblock %}
+
+{% block head %}
+<style>
+    body { background-color: #000000; }
+    .main { padding: 0; }
+
+    .leaderboards-section {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #000000 0%, #071421 100%);
+        padding: 100px 0 50px 0;
+    }
+
+    .leaderboards-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 3rem;
+    }
+
+    /* Header */
+    .leaderboards-header { text-align: center; margin-bottom: 40px; }
+    .leaderboards-header h1 {
+        font-size: 48px; font-weight: 700; color: #ffffff;
+        letter-spacing: 3px; text-shadow: 0 0 40px rgba(42, 167, 255, 0.5);
+        margin: 0 0 10px 0;
+    }
+    .leaderboards-header .subtitle { font-size: 14px; color: rgba(255,255,255,0.6); letter-spacing: 2px; }
+
+    /* View Toggle */
+    .view-toggle {
+        display: flex; justify-content: center; gap: 12px;
+        margin-bottom: 50px; flex-wrap: wrap;
+    }
+    .view-toggle-btn {
+        background: transparent; border: 1px solid rgba(255,255,255,0.3);
+        color: rgba(255,255,255,0.7); padding: 10px 28px;
+        font-size: 11px; letter-spacing: 2px; font-weight: 600;
+        cursor: pointer; transition: all 0.3s ease;
+        text-decoration: none; display: inline-block;
+    }
+    .view-toggle-btn:hover { border-color: rgba(255,255,255,0.6); color: white; background: rgba(255,255,255,0.05); }
+    .view-toggle-btn.active { border-color: rgba(42,167,255,0.8); color: white; background: rgba(42,167,255,0.2); }
+
+    /* Leaderboard Grid */
+    .leaderboards-grid {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 30px;
+    }
+
+    /* Leaderboard Card */
+    .leaderboard-card {
+        background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 10px; padding: 25px; transition: all 0.3s ease;
+    }
+    .leaderboard-card:hover { background: rgba(255,255,255,0.05); border-color: rgba(42,167,255,0.3); }
+    .leaderboard-title { font-size: 18px; font-weight: 700; color: rgba(42,167,255,0.9); letter-spacing: 2px; margin-bottom: 8px; }
+    .leaderboard-description { font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 20px; letter-spacing: 1px; }
+
+    /* Ranking Entry */
+    .ranking-entry {
+        display: flex; align-items: center; gap: 15px;
+        background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 8px; padding: 12px 15px; margin-bottom: 10px; transition: all 0.2s ease;
+    }
+    .ranking-entry:hover { background: rgba(255,255,255,0.05); border-color: rgba(42,167,255,0.3); transform: translateX(5px); }
+    .ranking-entry:last-child { margin-bottom: 0; }
+
+    .rank-number { font-size: 20px; font-weight: 700; color: rgba(42,167,255,0.8); min-width: 30px; text-align: center; }
+    .rank-number.first { color: #FFD700; }
+    .rank-number.second { color: #C0C0C0; }
+    .rank-number.third { color: #CD7F32; }
+
+    .entry-image { width: 60px; height: 70px; background: transparent; display: flex; align-items: center; justify-content: center; overflow: visible; flex-shrink: 0; }
+    .entry-image img { width: 100%; height: 100%; object-fit: contain; }
+    .entry-image.team-badge { width: 50px; height: 50px; }
+    .entry-image.team-badge img { object-fit: contain; padding: 0; }
+
+    .entry-info { flex: 1; min-width: 0; }
+    .entry-name { font-size: 15px; font-weight: 600; color: white; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .entry-team { font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 1px; }
+
+    .metric-value { text-align: right; flex-shrink: 0; }
+    .metric-number { font-size: 24px; font-weight: 700; color: white; line-height: 1; }
+    .metric-unit { font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 1px; margin-top: 3px; }
+
+    /* Error Message */
+    .error-message { text-align: center; padding: 40px; color: rgba(255,255,255,0.6); font-size: 14px; }
+
+    /* ─── Percentile Table ─── */
+    .pct-table-wrapper { overflow-x: auto; }
+    .pct-table {
+        width: 100%; border-collapse: collapse; font-size: 12px; min-width: 900px;
+    }
+    .pct-table th {
+        padding: 10px 8px; text-align: center;
+        color: rgba(255,255,255,0.6); font-size: 10px; font-weight: 600;
+        letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.1);
+        white-space: nowrap;
+    }
+    .pct-table th.left { text-align: left; }
+    .pct-table td { padding: 7px 6px; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center; vertical-align: middle; }
+    .pct-table td.player-cell { text-align: left; }
+    .pct-table tbody tr:hover td { background: rgba(255,255,255,0.04); }
+
+    .pct-bar-cell { min-width: 80px; }
+    .pct-bar-wrap { display: flex; align-items: center; gap: 6px; }
+    .pct-bar {
+        height: 8px; border-radius: 4px; flex-shrink: 0;
+        transition: width 0.3s;
+    }
+    .pct-val { font-size: 11px; font-weight: 700; color: white; white-space: nowrap; }
+
+    .pos-badge {
+        display: inline-block; padding: 2px 7px; border-radius: 4px;
+        font-size: 9px; font-weight: 700; letter-spacing: 1px;
+    }
+    .pos-GKP { background: rgba(246,160,25,0.2); color: #f6a019; }
+    .pos-DEF { background: rgba(76,175,80,0.2); color: #4caf50; }
+    .pos-MID { background: rgba(42,167,255,0.2); color: #2aa7ff; }
+    .pos-FWD { background: rgba(244,67,54,0.2); color: #f44336; }
+
+    /* ─── Value View ─── */
+    .value-grid {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;
+    }
+    .value-pos-card {
+        background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 10px; padding: 20px;
+    }
+    .value-pos-title { font-size: 14px; font-weight: 700; letter-spacing: 2px; color: rgba(42,167,255,0.9); margin-bottom: 14px; }
+
+    .value-entry {
+        display: flex; align-items: center; gap: 10px;
+        padding: 8px 10px; border-radius: 6px; margin-bottom: 6px;
+        background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+        transition: all 0.2s;
+    }
+    .value-entry:hover { background: rgba(255,255,255,0.06); border-color: rgba(42,167,255,0.3); }
+    .value-rank { font-size: 16px; font-weight: 700; color: rgba(42,167,255,0.8); min-width: 22px; text-align: center; }
+    .value-rank.first { color: #FFD700; } .value-rank.second { color: #C0C0C0; } .value-rank.third { color: #CD7F32; }
+    .value-info { flex: 1; min-width: 0; }
+    .value-name { font-size: 13px; font-weight: 600; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .value-sub { font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+    .value-metric { text-align: right; flex-shrink: 0; }
+    .value-pts-val { font-size: 16px; font-weight: 700; color: white; }
+    .value-pts-unit { font-size: 9px; color: rgba(255,255,255,0.4); letter-spacing: 1px; }
+
+    /* ─── xG Diff View ─── */
+    .xg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .xg-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 20px; }
+    .xg-card-title { font-size: 14px; font-weight: 700; letter-spacing: 2px; margin-bottom: 14px; }
+    .xg-card-title.over { color: #4caf50; }
+    .xg-card-title.under { color: #f44336; }
+
+    .xg-entry {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 8px 10px; border-radius: 6px; margin-bottom: 6px;
+        background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+        transition: all 0.2s;
+    }
+    .xg-entry:hover { background: rgba(255,255,255,0.05); }
+    .xg-player-info { flex: 1; min-width: 0; }
+    .xg-player-name { font-size: 13px; font-weight: 600; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .xg-player-sub { font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+    .xg-stats { display: flex; gap: 14px; align-items: center; flex-shrink: 0; }
+    .xg-stat-pair { text-align: center; }
+    .xg-stat-val { font-size: 13px; font-weight: 700; color: white; }
+    .xg-stat-lbl { font-size: 9px; color: rgba(255,255,255,0.4); letter-spacing: 0.5px; }
+    .xg-diff-val { font-size: 14px; font-weight: 700; min-width: 44px; text-align: right; }
+    .xg-diff-val.pos { color: #4caf50; }
+    .xg-diff-val.neg { color: #f44336; }
+
+    /* Responsive */
+    @media (max-width: 1200px) { .leaderboards-grid { grid-template-columns: 1fr; } .xg-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) {
+        .leaderboards-container { padding: 0 1.5rem; }
+        .leaderboards-header h1 { font-size: 32px; }
+        .view-toggle { flex-direction: column; gap: 8px; }
+        .view-toggle-btn { width: 100%; text-align: center; }
+        .value-grid { grid-template-columns: 1fr; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="leaderboards-section">
+    <div class="leaderboards-container">
+        <!-- Header -->
+        <div class="leaderboards-header">
+            <h1>LEADERBOARDS</h1>
+            <div class="subtitle">SEASON RANKINGS</div>
+        </div>
+
+        <!-- View Toggle -->
+        <div class="view-toggle">
+            <a href="{{ url_for('leaderboards.leaderboards_page', view='players') }}"
+               class="view-toggle-btn {% if view == 'players' %}active{% endif %}">PLAYERS</a>
+            <a href="{{ url_for('leaderboards.leaderboards_page', view='teams') }}"
+               class="view-toggle-btn {% if view == 'teams' %}active{% endif %}">TEAMS</a>
+            <a href="{{ url_for('leaderboards.leaderboards_page', view='percentiles') }}"
+               class="view-toggle-btn {% if view == 'percentiles' %}active{% endif %}">PERCENTILES</a>
+            <a href="{{ url_for('leaderboards.leaderboards_page', view='value') }}"
+               class="view-toggle-btn {% if view == 'value' %}active{% endif %}">VALUE</a>
+            <a href="{{ url_for('leaderboards.leaderboards_page', view='xg') }}"
+               class="view-toggle-btn {% if view == 'xg' %}active{% endif %}">xG DIFF</a>
+        </div>
+
+        {% if error %}
+        <div class="error-message">{{ error }}</div>
+        {% endif %}
+
+        <!-- PLAYERS / TEAMS standard views -->
+        {% if leaderboards %}
+        <!-- Standard leaderboards grid (players/teams) -->
+        <div class="leaderboards-grid">
+            {% for key, data in leaderboards.items() %}
+            <div class="leaderboard-card">
+                <div class="leaderboard-title">{{ data.label }}</div>
+                <div class="leaderboard-description">{{ data.description }}</div>
+
+                {% if view == 'players' %}
+                    {% for player in data.players %}
+                    <div class="ranking-entry">
+                        <div class="rank-number {% if player.rank == 1 %}first{% elif player.rank == 2 %}second{% elif player.rank == 3 %}third{% endif %}">{{ player.rank }}</div>
+                        <div class="entry-image">
+                            <img src="{{ player.photo_url }}" alt="{{ player.player_name }}"
+                                 onerror="this.src='{{ url_for('static', filename='images/totw/placeholder.png') }}'">
+                        </div>
+                        <div class="entry-info">
+                            <div class="entry-name">{{ player.player_name }}</div>
+                            <div class="entry-team">{{ player.team_short }}</div>
+                        </div>
+                        <div class="metric-value">
+                            <div class="metric-number">{{ player.value }}</div>
+                            <div class="metric-unit">{{ data.unit }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% if view == 'teams' %}
+                    {% for team in data.teams %}
+                    <div class="ranking-entry">
+                        <div class="rank-number {% if team.rank == 1 %}first{% elif team.rank == 2 %}second{% elif team.rank == 3 %}third{% endif %}">{{ team.rank }}</div>
+                        <div class="entry-image team-badge">
+                            <img src="{{ team.team_badge }}" alt="{{ team.team_short }}" onerror="this.style.display='none'">
+                        </div>
+                        <div class="entry-info">
+                            <div class="entry-name">{{ team.team_name }}</div>
+                            <div class="entry-team">{{ team.team_short }}</div>
+                        </div>
+                        <div class="metric-value">
+                            <div class="metric-number">{{ team.value }}</div>
+                            <div class="metric-unit">{{ data.unit }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- PERCENTILE TABLE -->
+        {% if view == 'percentiles' %}
+        {% if percentile_rows %}
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:25px;">
+            <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:16px;letter-spacing:1px;">
+                Percentile rank vs positional peers &bull; min. 450 minutes &bull; top 100 shown
+            </div>
+            <div class="pct-table-wrapper">
+                <table class="pct-table">
+                    <thead>
+                        <tr>
+                            <th class="left">PLAYER</th>
+                            <th class="left">POS</th>
+                            <th>MIN</th>
+                            <th>G/90</th>
+                            <th>xG/90</th>
+                            <th>Sh/90</th>
+                            <th>A/90</th>
+                            <th>xA/90</th>
+                            <th>KP/90</th>
+                            <th>INF</th>
+                            <th>CRE</th>
+                            <th>THR</th>
+                            <th>ICT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set metric_keys = ['goals_p90_pct','xG_p90_pct','shots_p90_pct','assists_p90_pct','xA_p90_pct','key_passes_p90_pct','influence_pct','creativity_pct','threat_pct','ict_index_pct'] %}
+                        {% for row in percentile_rows %}
+                        <tr>
+                            <td class="player-cell" style="color:white;font-weight:600;white-space:nowrap;">{{ row.player_name }}</td>
+                            <td><span class="pos-badge pos-{{ row.position }}">{{ row.position }}</span></td>
+                            <td style="color:rgba(255,255,255,0.6);">{{ row.minutes }}</td>
+                            {% for mk in metric_keys %}
+                            {% set pct = row.get(mk, 0)|int %}
+                            <td class="pct-bar-cell">
+                                <div class="pct-bar-wrap">
+                                    <div class="pct-bar" style="width:{{ [pct, 100]|min }}%;background:{% if pct >= 80 %}#4caf50{% elif pct >= 60 %}#2aa7ff{% elif pct >= 40 %}#f6a019{% else %}rgba(255,255,255,0.2){% endif %};"></div>
+                                    <span class="pct-val">{{ pct }}</span>
+                                </div>
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% else %}
+        <div class="error-message">No data available. Please fetch data from the dashboard first.</div>
+        {% endif %}
+        {% endif %}
+
+        <!-- VALUE VIEW -->
+        {% if view == 'value' %}
+        {% if value_data %}
+        <div style="margin-bottom:14px;font-size:12px;color:rgba(255,255,255,0.5);text-align:center;letter-spacing:1px;">
+            FPL points per &pound;1m &bull; min. 450 minutes &bull; top 5 per position
+        </div>
+        <div class="value-grid">
+            {% for pos, players in value_data.items() %}
+            {% if players %}
+            <div class="value-pos-card">
+                <div class="value-pos-title">{{ pos }}</div>
+                {% for p in players %}
+                <div class="value-entry">
+                    <div class="value-rank {% if p.rank == 1 %}first{% elif p.rank == 2 %}second{% elif p.rank == 3 %}third{% endif %}">{{ p.rank }}</div>
+                    <div class="value-info">
+                        <div class="value-name">{{ p.player_name }}</div>
+                        <div class="value-sub">{{ p.team_short }} &bull; &pound;{{ p.now_cost }}m &bull; {{ p.total_points }} pts</div>
+                    </div>
+                    <div class="value-metric">
+                        <div class="value-pts-val">{{ p.value }}</div>
+                        <div class="value-pts-unit">PTS/&pound;M</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="error-message">No data available. Please fetch data from the dashboard first.</div>
+        {% endif %}
+        {% endif %}
+
+        <!-- xG DIFF VIEW -->
+        {% if view == 'xg' %}
+        {% if xg_over or xg_under %}
+        <div style="margin-bottom:16px;font-size:12px;color:rgba(255,255,255,0.5);text-align:center;letter-spacing:1px;">
+            Goals minus Expected Goals &bull; positive = overperforming xG &bull; min. 450 minutes
+        </div>
+        <div class="xg-grid">
+            <div class="xg-card">
+                <div class="xg-card-title over">OVERPERFORMERS (Goals &gt; xG)</div>
+                {% for p in xg_over %}
+                <div class="xg-entry">
+                    <div class="xg-player-info">
+                        <div class="xg-player-name">{{ p.player_name }}</div>
+                        <div class="xg-player-sub">{{ p.team_short }} &bull; {{ p.position }}</div>
+                    </div>
+                    <div class="xg-stats">
+                        <div class="xg-stat-pair">
+                            <div class="xg-stat-val">{{ p.goals }}</div>
+                            <div class="xg-stat-lbl">GOALS</div>
+                        </div>
+                        <div class="xg-stat-pair">
+                            <div class="xg-stat-val">{{ p.xG }}</div>
+                            <div class="xg-stat-lbl">xG</div>
+                        </div>
+                        <div class="xg-diff-val pos">+{{ p.xg_diff }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="xg-card">
+                <div class="xg-card-title under">UNDERPERFORMERS (Goals &lt; xG)</div>
+                {% for p in xg_under %}
+                <div class="xg-entry">
+                    <div class="xg-player-info">
+                        <div class="xg-player-name">{{ p.player_name }}</div>
+                        <div class="xg-player-sub">{{ p.team_short }} &bull; {{ p.position }}</div>
+                    </div>
+                    <div class="xg-stats">
+                        <div class="xg-stat-pair">
+                            <div class="xg-stat-val">{{ p.goals }}</div>
+                            <div class="xg-stat-lbl">GOALS</div>
+                        </div>
+                        <div class="xg-stat-pair">
+                            <div class="xg-stat-val">{{ p.xG }}</div>
+                            <div class="xg-stat-lbl">xG</div>
+                        </div>
+                        <div class="xg-diff-val neg">{{ p.xg_diff }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div class="error-message">No data available. Please fetch data from the dashboard first.</div>
+        {% endif %}
+        {% endif %}
+
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // hide flash messages after a short delay to avoid cluttering the leaderboard
+    setTimeout(() => {
+        document.querySelectorAll('.flash-message').forEach(m => m.style.display = 'none');
+    }, 5000);
+</script>
+{% endblock %}
